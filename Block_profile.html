@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harishchandrapur-I Development Block Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f7fb;
+            font-family: Segoe UI, sans-serif;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #d35400, #e67e22);
+            color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+        .table th {
+            background: #e67e22;
+            color: white;
+            vertical-align: middle;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .badge-sl {
+            background: #e67e22;
+            font-size: 14px;
+        }
+        .info {
+            max-width: 450px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .table-hover tbody tr:hover {
+            background: #fff3e0;
+        }
+        .btn-orange {
+            background-color: #d35400;
+            color: white;
+            border: none;
+        }
+        .btn-orange:hover {
+            background-color: #b34700;
+            color: white;
+        }
+        .gov-footer {
+            margin-top: 30px;
+            background: linear-gradient(135deg, #a04000, #d35400, #e67e22);
+            border-top: 4px solid #f39c12;
+            padding: 20px 30px;
+            color: #ffffff;
+            box-shadow: 0 -8px 25px rgba(0,0,0,.08);
+        }
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .footer-logo {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f39c12; 
+            font-size: 22px;
+        }
+        .footer-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .footer-sub {
+            font-size: 12px;
+            color: #ffedd5;
+            letter-spacing: 1px;
+        }
+        .footer-right {
+            font-size: 14px;
+            color: #ffedd5;
+        }
+        @media(max-width:768px){
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-left {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="page-header shadow">
+            <div class="row align-items-center">
+                <div class="col-md-9">
+                    <h2>
+                        <i class="fa-solid fa-building"></i>
+                        Harishchandrapur-I Development Block
+                    </h2>
+                    <p class="mb-0">
+                        Block Profile & Administrative Information (District: Malda)
+                    </p>
+                </div>
+                <div class="col-md-3 text-end d-none d-md-block">
+                    <i class="fa-solid fa-landmark fa-4x"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-lg">
+            <div class="card-header text-white" style="background-color: #d35400;">
+                <div class="row align-items-center">
+                    <div class="col-md-6 mb-2 mb-md-0">
+                        <h4 class="mb-0 mt-1">
+                            <i class="fa-solid fa-list"></i>
+                            Block Profile
+                        </h4>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" id="search" class="form-control" placeholder="Search Subject...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="profileTable">
+                        <thead>
+                            <tr>
+                                <th width="70">Sl.</th>
+                                <th width="280">Subject</th>
+                                <th>Information</th>
+                                <th width="180">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="badge badge-sl">1</span></td>
+                                <td><strong>Geographical Area</strong></td>
+                                <td><div class="info">171.40 Sq. Km ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">2</span></td>
+                                <td><strong>No. of Police Station</strong></td>
+                                <td><div class="info">1 (Harishchandrapur PS) ...</div></td>
+                                <td>
+                                    <a href="#police" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">3</span></td>
+                                <td><strong>Total No. of Mouza</strong></td>
+                                <td><div class="info">105 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">4</span></td>
+                                <td><strong>Total No. of Gram Panchayat</strong></td>
+                                <td><div class="info">7 (Bhingole, Boroi, Harishchandrapur, Kushida, Mahendrapur, Rashidabad, Tulshihata) ...</div></td>
+                                <td>
+                                    <a href="#gp" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">5</span></td>
+                                <td><strong>Total Population (As per Census 2011)</strong></td>
+                                <td><div class="info">199,493 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">6</span></td>
+                                <td><strong>Total Male Population (As per Census 2011)</strong></td>
+                                <td><div class="info">103,189 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">7</span></td>
+                                <td><strong>Total Female Population (As per Census 2011)</strong></td>
+                                <td><div class="info">96,304 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">8</span></td>
+                                <td><strong>SC Population (As per Census 2011)</strong></td>
+                                <td><div class="info">38,500 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">9</span></td>
+                                <td><strong>ST Population (As per Census 2011)</strong></td>
+                                <td><div class="info">1,200 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">10</span></td>
+                                <td><strong>University</strong></td>
+                                <td><div class="info">0 ...</div></td>
+                                <td>
+                                    <a href="#university" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">11</span></td>
+                                <td><strong>College</strong></td>
+                                <td><div class="info">1 (Harishchandrapur College) ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">12</span></td>
+                                <td><strong>Secondary &amp; HS School</strong></td>
+                                <td><div class="info">18 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">13</span></td>
+                                <td><strong>Upper Primary School</strong></td>
+                                <td><div class="info">10 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">14</span></td>
+                                <td><strong>Primary School</strong></td>
+                                <td><div class="info">112 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">15</span></td>
+                                <td><strong>S.S.K.</strong></td>
+                                <td><div class="info">22 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">16</span></td>
+                                <td><strong>M.S.K</strong></td>
+                                <td><div class="info">3 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">17</span></td>
+                                <td><strong>PTTI</strong></td>
+                                <td><div class="info">1 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">18</span></td>
+                                <td><strong>ITI</strong></td>
+                                <td><div class="info">1 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">19</span></td>
+                                <td><strong>Block Primary Health Centre</strong></td>
+                                <td><div class="info">1 (Harishchandrapur Rural Hospital) ...</div></td>
+                                <td>
+                                    <a href="#hospital" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">20</span></td>
+                                <td><strong>Total No. of Primary Health Centre</strong></td>
+                                <td><div class="info">3 ...</div></td>
+                                <td>
+                                    <a href="#phc" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">21</span></td>
+                                <td><strong>Total No. of Sub Centre</strong></td>
+                                <td><div class="info">32 ...</div></td>
+                                <td>
+                                    <a href="#subcentre" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">22</span></td>
+                                <td><strong>GP Dispensary</strong></td>
+                                <td><div class="info">7 ...</div></td>
+                                <td>
+                                    <a href="#dispensary" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">23</span></td>
+                                <td><strong>ICDS Centre</strong></td>
+                                <td><div class="info">245 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">24</span></td>
+                                <td><strong>Total No of RLI Scheme</strong></td>
+                                <td><div class="info">8 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">25</span></td>
+                                <td><strong>Total No. of Mini RLI Scheme</strong></td>
+                                <td><div class="info">22 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">26</span></td>
+                                <td><strong>Total No. of Tube well</strong></td>
+                                <td><div class="info">1850 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">27</span></td>
+                                <td><strong>No. of Sub Post Office</strong></td>
+                                <td><div class="info">1 (Harishchandrapur) ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">28</span></td>
+                                <td><strong>No. of Branch Post Office</strong></td>
+                                <td><div class="info">15 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">29</span></td>
+                                <td><strong>Nationalized Banks Branch</strong></td>
+                                <td><div class="info">6 ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">30</span></td>
+                                <td><strong>Regional Rural Banks Branch</strong></td>
+                                <td><div class="info">3 (Bangiya Gramin Vikash Bank) ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">31</span></td>
+                                <td><strong>Earthen Road</strong></td>
+                                <td><div class="info">115 KM ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">32</span></td>
+                                <td><strong>Morrum Road</strong></td>
+                                <td><div class="info">180 KM ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">33</span></td>
+                                <td><strong>Bituminous Road</strong></td>
+                                <td><div class="info">142 KM ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">34</span></td>
+                                <td><strong>Concrete Road</strong></td>
+                                <td><div class="info">85 KM ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">35</span></td>
+                                <td><strong>Net cultivated Area</strong></td>
+                                <td><div class="info">13,500 Hector ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">36</span></td>
+                                <td><strong>Gross cultivated area</strong></td>
+                                <td><div class="info">16,200 Hector ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">37</span></td>
+                                <td><strong>Total Barren Land</strong></td>
+                                <td><div class="info">420 Hector ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">38</span></td>
+                                <td><strong>Total Area under Forest</strong></td>
+                                <td><div class="info">850 Hector ...</div></td>
+                                <td><span class='badge bg-secondary'>No Details</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">39</span></td>
+                                <td><strong>No of Assembly Constituency under the Block</strong></td>
+                                <td><div class="info">1 (Harishchandrapur) ...</div></td>
+                                <td>
+                                    <a href="#assembly" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="badge badge-sl">40</span></td>
+                                <td><strong>Total Number of Polling Stations</strong></td>
+                                <td><div class="info">145 ...</div></td>
+                                <td>
+                                    <a href="#polling" onclick="return false;" class="btn btn-orange btn-sm">
+                                        <i class="fa-solid fa-circle-info"></i> Know More
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="#" onclick="return false;" class="btn btn-orange btn-lg shadow-sm">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+        </div>
+    </div>
+
+    <footer class="gov-footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <div class="footer-logo">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <div>
+                        <div class="footer-title">
+                            Harishchandrapur-I Development Block
+                        </div>
+                        <div class="footer-sub">
+                            District: Malda | Government of West Bengal
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-right">
+                    © 2026 All Rights Reserved
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById("search").addEventListener("keyup", function(){
+            var value = this.value.toLowerCase();
+            var rows = document.querySelectorAll("#profileTable tbody tr");
+            rows.forEach(function(row){
+                row.style.display = row.innerText.toLowerCase().indexOf(value) > -1 ? "" : "none";
+            });
+        });
+    </script>
+</body>
+</html>

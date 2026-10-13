@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login via OTP - Harishchandrapur-I Dev. Block</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- General Reset & Body Styling --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            /* Changed to light pink gradient */
+            background: #fffaf5; /* Very subtle light orange/off-white background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- Main Login Container --- */
+        .login-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .emblem {
+            width: 50px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            color: #d65108;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            font-size: 13px;
+            color: #158348;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* --- Input Fields Styling --- */
+        .input-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .icon-box {
+            background-color: #d65108;
+            color: #ffffff;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 50px;
+        }
+
+        .input-group input {
+            border: none;
+            padding: 14px 15px;
+            width: 100%;
+            font-size: 14px;
+            outline: none;
+            color: #495057;
+        }
+
+        .input-group input:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        /* --- Captcha Box Styling --- */
+        .captcha-box {
+            background-color: #f7f4fc;
+            border: 1px solid #e0d8f0;
+            border-radius: 4px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .captcha-text {
+            color: #5c41cc;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .captcha-box .fa-sync-alt {
+            position: absolute;
+            right: 15px;
+            color: #158348;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        /* --- Buttons Styling --- */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            background-color: #d65108;
+        }
+
+        .footer-link a {
+            color: #d65108;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-msg {
+            color: #158348;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+            
+<body>
+
+    <div class="login-container">
+        <h1>New User Registration</h1>
+        <p class="subtitle">Harishchandrapur-I Dev. Block</p>
+
+        <p id="error-message" class="error-msg">Pins do not match!</p>
+
+        <form id="registrationForm">
+            <!-- Full Name Input -->
+            <div class="input-group">
+                <div class="icon-box">
+                    <i class="fas fa-user"></i>
+                </div>
+                <input type="text" id="fullName" placeholder="Enter Full Name" required>
+            </div>
+
+            <!-- Mobile Number Input -->
+            <div class="input-group">
+                <div class="icon-box">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <input type="tel" id="mobileNumber" pattern="[0-9]{10}" placeholder="Enter 10-digit Mobile Number" required>
+            </div>
+
+            <!-- Secret Pin Input -->
+            <div class="input-group">
+                <div class="icon-box">
+                    <i class="fas fa-key"></i>
+                </div>
+                <input type="password" id="secretPin" placeholder="Create Secret Pin" required>
+            </div>
+
+            <!-- Confirm Secret Pin Input -->
+            <div class="input-group">
+                <div class="icon-box">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <input type="password" id="confirmPin" placeholder="Confirm Secret Pin" required>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="btn-container">
+                <button type="submit" class="btn btn-register">Register</button>
+            </div>
+        </form>
+
+        <!-- Footer Link -->
+        <p class="login-link">Already Registered? <a href="login.html">Login Here</a></p>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsv8pXm3nuLDwTWo6R_Yu0AquHGaZ2vqw",
+            authDomain: "hcp1-b92cf.firebaseapp.com",
+            databaseURL: "https://hcp1-b92cf-default-rtdb.firebaseio.com",
+            projectId: "hcp1-b92cf",
+            storageBucket: "hcp1-b92cf.firebasestorage.app",
+            messagingSenderId: "734442156416",
+            appId: "1:734442156416:web:ecb056f3bd1b52039a5165",
+            measurementId: "G-PKYD293JCJ"
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    try {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } catch (customTokenErr) {
+                        console.warn("Custom token sign-in skipped:", customTokenErr);
+                    }
+                } else {
+                    // Attempt anonymous sign-in, but catch admin-restricted-operation or other config blocks gracefully
+                    await signInAnonymously(auth).catch(err => {
+                        console.warn("Anonymous sign-in restricted/disabled in Firebase Console. Continuing without explicit auth session.", err.message);
+                    });
+                }
+            } catch (err) {
+                console.warn("Auth initialization notice:", err);
+            }
+        }
+        initAuth();
+
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Prevent page reload
+
+            // Get form values
+            const fullName = document.getElementById('fullName').value.trim();
+            const mobileNumber = document.getElementById('mobileNumber').value.trim();
+            const secretPin = document.getElementById('secretPin').value;
+            const confirmPin = document.getElementById('confirmPin').value;
+            const errorMessage = document.getElementById('error-message');
+
+            // Basic Validation
+            if (secretPin !== confirmPin) {
+                errorMessage.innerText = "Secret PINs do not match!";
+                errorMessage.style.display = "block";
+                return;
+            }
+
+            try {
+                // Check if user already exists using Firestore path structure
+                const userDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'registered_users', mobileNumber);
+                const userSnap = await getDoc(userDocRef);
+
+                if (userSnap.exists()) {
+                    errorMessage.innerText = "This Mobile Number is already registered.";
+                    errorMessage.style.display = "block";
+                    return;
+                }
+
+                // Store data securely in Firestore
+                const userData = {
+                    name: fullName,
+                    mobile: mobileNumber,
+                    pin: secretPin,
+                    createdAt: new Date().toISOString()
+                };
+                
+                await setDoc(userDocRef, userData);
+
+                // Success feedback
+                alert("Registration Successful! Please login.");
+                window.location.href = "login.html"; // Redirect to login page
+            } catch (err) {
+                console.error("Error saving user to Firestore:", err);
+                errorMessage.innerText = "Registration failed: " + (err.message || "Please check Firestore rules/connection.");
+                errorMessage.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>

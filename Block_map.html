@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrative Map - Harishchandrapur-I Block, Malda</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        /* Header Styling */
+        .header {
+            background-color: #ff6600; /* Changed to orange */
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header img {
+            height: 70px;
+        }
+        .header-content h1 {
+            margin: 5px 0 0;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+        .header-content h3 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+        .header-content .location {
+            margin-top: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffe600; /* Adjusted for better contrast with orange */
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Title Section */
+        .title-section {
+            text-align: center;
+            border-bottom: 2px solid #ff6600; /* Matched theme */
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .title-section h2 {
+            margin: 0;
+            color: #ff6600; /* Matched theme */
+            font-size: 28px;
+        }
+        .title-section h4 {
+            margin: 8px 0 0;
+            color: #555;
+            font-weight: 500;
+        }
+
+        /* Map Image Wrapper */
+        .map-wrapper {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .map-wrapper p {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 15px;
+        }
+        .map-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Information Box */
+        .info-section {
+            background: #e9ecef;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ff6600; /* Matched theme */
+        }
+        .info-section h5 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #ff6600; /* Matched theme */
+        }
+        .info-section p {
+            line-height: 1.7;
+            text-align: justify;
+            margin-bottom: 0;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .action-buttons a {
+            text-decoration: none;
+            background: #ff6600; /* Matched theme */
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-buttons a:hover {
+            background: #e65c00; /* Darker orange on hover */
+        }
+
+        /* Navigation Buttons (Bottom) */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 25px;
+            margin-top: 40px;
+        }
+        .nav-buttons a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 10px 20px;
+            background: #f1f1f1;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .nav-buttons a:hover {
+            background: #e2e2e2;
+        }
+        .nav-buttons .home-btn {
+            background: #28a745;
+            color: white;
+        }
+        .nav-buttons .home-btn:hover {
+            background: #218838;
+        }
+
+        /* Footer */
+        .footer {
+            background: #ff6600; /* Changed to orange */
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+        .footer p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header class="header">
+        <!-- Using a placeholder for the State Emblem. Replace with your local logo path -->
+        <img src="India_logo.jfif">
+        <div class="header-content">
+            <h3>Government of West Bengal</h3>
+            <h1>Harishchandrapur-I Development Block</h1>
+            <div class="location">📍 Malda District</div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        
+        <!-- Page Title -->
+        <div class="title-section">
+            <h2>🗺️ Block Map</h2>
+            <h4>Office of the Block Development Officer</h4>
+        </div>
+
+        <!-- Map Display -->
+        <div class="map-wrapper">
+            <p>Official Administrative Map</p>
+            <!-- Replace 'images/harishchandrapur_map.jpg' with the actual path to your map image -->
+            <img src="map.png" alt="Harishchandrapur-I Block Map">
+        </div>
+
+        <!-- Block Description -->
+        <div class="info-section">
+            <h5>About Harishchandrapur-I Development Block</h5>
+            <p>
+                The Harishchandrapur-I Development Block forms an administrative division in the Chanchal subdivision of the Malda district, covering an area of 171.40 sq km. This map provides geographical boundaries and outlines the 7 Gram Panchayats (Kushida, Boroi, Rashidabad, Tulshihata, Bhingole, Mahendrapur, and Harishchandrapur), as well as major roads, rivers, and administrative units. It serves as an official reference for rural development planning, governance, and public service delivery.
+            </p>
+        </div>
+
+        <!-- Utility Buttons -->
+        <div class="action-buttons">
+            <a href="images/harishchandrapur_map.jpg" target="_blank">🔍 View Full Size</a>
+            <a href="images/harishchandrapur_map.jpg" download>⬇ Download Map</a>
+            <a href="https://www.google.com/maps/place/Harishchandrapur,+West+Bengal" target="_blank">📍 Open Google Map</a>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="nav-buttons">
+            <a href="communication.html">⬅ Previous</a>
+            <a href="../index.html" class="home-btn">🏠 Home</a>
+            <a href="BDOs_directory.html">Next ➜</a>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p><strong>Office of the Block Development Officer</strong></p>
+        <p>Harishchandrapur-I Development Block | Government of West Bengal</p>
+        <p>&copy; 2026 All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>

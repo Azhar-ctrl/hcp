@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block Development Officer Directory</title>
+    <!-- Tailwind CSS for rapid styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #fff8f5; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .card-header-current { background-color: #ea580c; }
+        .card-header-former { background-color: #f97316; }
+        
+        .card-container {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+        .card-current { border-left: 4px solid #c2410c; }
+        .card-former { border-left: 4px solid #d1d5db; }
+        
+        main { flex-grow: 1; }
+
+        .site-footer {
+            background-color: #cd5a07;
+            color: #ffffff;
+            width: 100%;
+        }
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 15px;
+        }
+        .footer-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+        .footer-nav a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        .footer-nav .separator { color: #ffffff; font-weight: normal; }
+        .footer-info {
+            text-align: center;
+            padding: 20px 20px 25px 20px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .footer-info .block-name { font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-[#ea580c] text-white py-3 px-6 text-sm font-semibold tracking-wide flex justify-between items-center shadow-md">
+        <span>Block Development Officer Directory</span>
+        <div class="flex items-center gap-2">
+            <button id="openAddModal" class="hidden bg-white text-[#ea580c] px-3 py-1 rounded text-xs font-bold hover:bg-orange-50 transition-colors shadow-sm">
+                <i class="fas fa-plus mr-1"></i> Add BDO Officer
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto px-4 py-6">
+
+        <div class="flex justify-center mb-8">
+            <div class="flex shadow-sm rounded-md">
+                <input type="text" id="searchInput" placeholder="Search BDO Name" class="border border-gray-300 rounded-l-md px-3 py-1.5 w-64 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500">
+                <button id="searchBtn" class="bg-[#ea580c] text-white px-4 py-1.5 text-sm font-medium border border-[#ea580c] hover:bg-[#c2410c] transition-colors flex items-center gap-2">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button id="resetBtn" class="bg-[#6c757d] text-white px-4 py-1.5 text-sm font-medium rounded-r-md border border-[#6c757d] hover:bg-gray-600 transition-colors">
+                    Reset
+                </button>
+            </div>
+        </div>
+
+        <div id="bdoGrid" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+            <!-- Dynamic Cards Loaded from Firebase or Fallback will populate here -->
+        </div>
+    </main>
+
+    <div id="loginModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg max-w-sm w-full p-6 shadow-xl relative animate-fade-in">
+            <h3 class="text-lg font-bold text-[#ea580c] mb-4 flex items-center gap-2">
+                <i class="fas fa-lock"></i> Admin Portal Login
+            </h3>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">Admin Password</label>
+                    <input type="password" id="adminPasswordInput" required class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500" placeholder="Enter admin password">
+                    <p class="text-[11px] text-gray-500 mt-1">Default password for demo: <code class="bg-gray-100 px-1 py-0.5 rounded text-orange-600 font-bold">admin123</code></p>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t">
+                    <button type="button" id="closeLoginModalBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded text-xs font-semibold hover:bg-gray-400">Cancel</button>
+                    <button type="submit" class="bg-[#ea580c] text-white px-4 py-2 rounded text-xs font-semibold hover:bg-[#c2410c]">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="bdoModal" class="fixed inset-0 bg-black/50 hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg max-w-md w-full p-6 shadow-xl relative animate-fade-in">
+            <h3 class="text-lg font-bold text-[#ea580c] mb-4 flex items-center gap-2">
+                <i class="fas fa-user-tie"></i> Add New BDO Officer
+            </h3>
+            <form id="bdoForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">Full Name & Designation (e.g. Sudarshan Choudhury WBCS (Exe))</label>
+                    <input type="text" id="bdoNameInput" required class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500" placeholder="Officer Name & Designation">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">Status</label>
+                    <select id="bdoStatusInput" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500">
+                        <option value="current">Current BDO</option>
+                        <option value="former">Former BDO</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Tenure From</label>
+                        <input type="text" id="bdoFromInput" required placeholder="DD.MM.YYYY" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Tenure To</label>
+                        <input type="text" id="bdoToInput" required placeholder="Present or DD.MM.YYYY" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-orange-500">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 pt-3 border-t">
+                    <button type="button" id="closeModalBtn" class="bg-gray-300 text-gray-700 px-4 py-2 rounded text-xs font-semibold hover:bg-gray-400">Cancel</button>
+                    <button type="submit" class="bg-[#ea580c] text-white px-4 py-2 rounded text-xs font-semibold hover:bg-[#c2410c]">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsv8pXm3nuLDwTWo6R_Yu0AquHGaZ2vqw",
+            authDomain: "hcp1-b92cf.firebaseapp.com",
+            databaseURL: "https://hcp1-b92cf-default-rtdb.firebaseio.com",
+            projectId: "hcp1-b92cf",
+            storageBucket: "hcp1-b92cf.firebasestorage.app",
+            messagingSenderId: "734442156416",
+            appId: "1:734442156416:web:ecb056f3bd1b52039a5165",
+            measurementId: "G-PKYD293JCJ"
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'bdo-directory-app';
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Complete historical BDO records requested sequentially
+        const fallbackBdos = [
+            { id: '1', name: "Sudarshan Choudhury WBCS (Exe)", status: "former", fromDate: "27.09.2012", toDate: "23.10.2013" },
+            { id: '2', name: "Sujoy Dhar (Joint B.D.O. in-Charge)", status: "former", fromDate: "23.10.2013", toDate: "06.12.2013" },
+            { id: '3', name: "Pawan Kadyan (I.A.S.)", status: "former", fromDate: "06.12.2013", toDate: "31.01.2014" },
+            { id: '4', name: "Sujoy Dhar (Joint B.D.O. in-Charge)", status: "former", fromDate: "31.01.2014", toDate: "24.02.2014" },
+            { id: '5', name: "Biplab Kumar Roy WBCS (Exe)", status: "former", fromDate: "24.02.2014", toDate: "20.05.2017" },
+            { id: '6', name: "Indrajit Bhowmik (Joint B.D.O. in-Charge)", status: "former", fromDate: "20.05.2017", toDate: "12.06.2017" },
+            { id: '7', name: "Biplab Kumar Roy WBCS (Exe)", status: "former", fromDate: "12.06.2017", toDate: "08.08.2017" },
+            { id: '8', name: "Maghpone Dhendup Lama WBCS (Exe)", status: "former", fromDate: "08.08.2017", toDate: "15.02.2019" },
+            { id: '9', name: "Madhurima Chakraborty (Joint B.D.O. in-Charge)", status: "former", fromDate: "15.02.2019", toDate: "20.02.2019" },
+            { id: '10', name: "Anirban Basu WBCS (Exe)", status: "former", fromDate: "20.02.2019", toDate: "30.10.2023" },
+            { id: '11', name: "Biplab Kumar Ghosh (Joint B.D.O. in-Charge)", status: "former", fromDate: "30.10.2023", toDate: "31.10.2023" },
+            { id: '12', name: "Saumen Mandal WBCS (Exe)", status: "former", fromDate: "31.10.2023", toDate: "30.03.2026" },
+            { id: '13', name: "Smt. Shanu Bakshi WBCS (Exe.)", status: "former", fromDate: "30.03.2026", toDate: "05.06.2026" },
+            { id: '14', name: "Md. Ali Rumi (Joint B.D.O. in-Charge)", status: "former", fromDate: "05.06.2026", toDate: "11.06.2026" },
+            { id: '15', name: "Dhrubasish Samanta WBCS (Exe)", status: "current", fromDate: "11.06.2026", toDate: "Present" }
+        ];
+
+        // Helper to parse DD.MM.YYYY into comparable timestamp
+        function parseDate(dateStr) {
+            if (!dateStr || dateStr.toLowerCase() === 'present') return Date.now();
+            const parts = dateStr.split('.');
+            if (parts.length === 3) {
+                return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`).getTime();
+            }
+            return 0;
+        }
+
+        function renderBdoRecords(records) {
+            const bdoGrid = document.getElementById('bdoGrid');
+            bdoGrid.innerHTML = '';
+
+            // Sort records in descending order based on tenure start date
+            const sortedRecords = [...records].sort((a, b) => {
+                if (a.status === 'current') return -1;
+                if (b.status === 'current') return 1;
+                return parseDate(b.fromDate) - parseDate(a.fromDate);
+            });
+
+            sortedRecords.forEach(bdo => {
+                const isCurrent = bdo.status === 'current';
+                const isJointInCharge = (bdo.name || '').toLowerCase().includes('in-charge');
+                
+                let labelText = 'Former BDO';
+                if (isCurrent) {
+                    labelText = 'Current BDO';
+                } else if (isJointInCharge) {
+                    labelText = 'Former BDO In-Charge';
+                }
+
+                const headerClass = isCurrent ? 'card-header-current' : 'card-header-former';
+                const cardClass = isCurrent ? 'card-current' : 'card-former';
+                const iconClass = isCurrent ? 'fa-star' : 'fa-history';
+                
+                // Extract clean first and last name for initials/avatar
+                let cleanName = (bdo.name || '').split('-')[0].replace(/^(Shri\s+|Smt\.?\s+)/i, '').replace(/[()]/g, '').trim();
+                let nameParts = cleanName.split(' ');
+                let firstName = nameParts[0] || '';
+                let lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+                let avatarQuery = (firstName + ' ' + lastName).trim();
+                if (!avatarQuery) avatarQuery = cleanName;
+
+                let avatarUrl = `https://ui-avatars.com/api/?background=${isCurrent ? 'ea580c' : 'f97316'}&color=fff&name=${encodeURIComponent(avatarQuery)}`;
+
+                const cardHtml = `
+                    <div class="bg-white card-container ${cardClass} flex flex-col relative rounded-lg overflow-hidden">
+                        <div class="${headerClass} text-white text-xs font-semibold px-3 py-2 flex items-center gap-2">
+                            <i class="fas ${iconClass} text-xs"></i> ${labelText}
+                        </div>
+                        <div class="p-5 flex gap-5">
+                            <div class="w-28 h-28 rounded-full border-4 border-gray-100 shadow-sm overflow-hidden flex-shrink-0 bg-orange-400">
+                                <img src="${avatarUrl}" alt="BDO Profile" class="w-full h-full object-cover bdo-avatar" onerror="this.src='https://placehold.co/112x112/ea580c/fff?text=BDO'">
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-[#ea580c] font-bold text-base leading-tight uppercase">${bdo.name}</h3>
+                                <p class="text-gray-500 text-xs mt-1">Block Development Officer</p>
+                                
+                                <div class="bg-[#fff8f5] rounded p-3 mt-4 border border-orange-100">
+                                    <p class="text-xs font-bold text-[#c2410c] flex items-center gap-1.5">
+                                        <i class="fas fa-calendar-alt text-[#ea580c]"></i> Tenure
+                                    </p>
+                                    <p class="text-xs text-gray-700 mt-2 font-medium">
+                                        ${bdo.fromDate} &nbsp;&nbsp;To&nbsp;&nbsp; <span class="${(bdo.toDate || '').toLowerCase() === 'present' ? 'text-[#c2410c] font-bold' : ''}">${bdo.toDate}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                bdoGrid.insertAdjacentHTML('beforeend', cardHtml);
+            });
+        }
+
+        async function initAuthAndData() {
+            try {
+                await signInAnonymously(auth);
+                console.log("Signed in anonymously for Firebase Firestore read/write");
+            } catch (err) {
+                console.warn("Anonymous auth note:", err.message);
+            }
+        }
+        initAuthAndData();
+
+        // DOM elements
+        const bdoGrid = document.getElementById('bdoGrid');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const openAddModal = document.getElementById('openAddModal');
+        const bdoModal = document.getElementById('bdoModal');
+        const bdoForm = document.getElementById('bdoForm');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        let isAdminLoggedIn = localStorage.getItem('bdo_admin_logged_in') === 'true';
+
+        function updateAdminUI() {
+            if (isAdminLoggedIn) {
+                openAddModal.classList.remove('hidden');
+            } else {
+                openAddModal.classList.add('hidden');
+            }
+        }
+        updateAdminUI();
+
+        openAddModal.addEventListener('click', () => {
+            bdoModal.classList.remove('hidden');
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            bdoModal.classList.add('hidden');
+        });
+
+        bdoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!isAdminLoggedIn) {
+                alert('Unauthorized action! Please login as admin.');
+                return;
+            }
+
+            const name = document.getElementById('bdoNameInput').value.trim();
+            const status = document.getElementById('bdoStatusInput').value;
+            const fromDate = document.getElementById('bdoFromInput').value.trim();
+            const toDate = document.getElementById('bdoToInput').value.trim();
+
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'publicData', 'bdo_records'), {
+                    name,
+                    status,
+                    fromDate,
+                    toDate,
+                    createdAt: Date.now()
+                });
+                bdoForm.reset();
+                bdoModal.classList.add('hidden');
+            } catch (err) {
+                console.error("Error adding document: ", err);
+                alert("Error saving record to Firestore. Please check permissions.");
+            }
+        });
+
+        // Live sync from Firestore with fallback
+        try {
+            const recordsCol = collection(db, 'artifacts', appId, 'publicData', 'bdo_records');
+            onSnapshot(recordsCol, (snapshot) => {
+                let records = [];
+                snapshot.forEach(docSnap => {
+                    records.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                if (records.length === 0) {
+                    renderBdoRecords(fallbackBdos);
+                } else {
+                    renderBdoRecords(records);
+                }
+            }, (error) => {
+                console.warn("Firestore snapshot offline/restricted, using fallback records:", error);
+                renderBdoRecords(fallbackBdos);
+            });
+        } catch (ex) {
+            renderBdoRecords(fallbackBdos);
+        }
+
+        // Search & Reset
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.card-container');
+            cards.forEach(card => {
+                const nameElement = card.querySelector('h3');
+                if (nameElement) {
+                    const name = nameElement.textContent.toLowerCase();
+                    card.style.display = name.includes(query) ? 'flex' : 'none';
+                }
+            });
+        }
+
+        function resetSearch() {
+            searchInput.value = '';
+            const cards = document.querySelectorAll('.card-container');
+            cards.forEach(card => {
+                card.style.display = 'flex';
+            });
+        }
+
+        searchBtn.addEventListener('click', performSearch);
+        resetBtn.addEventListener('click', resetSearch);
+        
+        // Live automatic search on input / typing
+        searchInput.addEventListener('input', performSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') performSearch();
+        });
+    </script>
+</body>
+</html>

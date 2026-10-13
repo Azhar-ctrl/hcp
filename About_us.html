@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Harishchandrapur-I Development Block</title>
+    <style>
+        /* Base Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Top Bar for Logo */
+        .top-bar {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 4px solid #a04000;
+        }
+        .top-bar img {
+            height: 80px;
+            width: auto;
+        }
+
+        /* Header Styling */
+        .header {
+            background-color: #d35400; 
+            color: #ffffff;
+            text-align: center;
+            padding: 25px 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .header h1 {
+            margin: 10px 0 5px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 0;
+            font-size: 15px;
+            color: #fdebd0; 
+        }
+
+        /* Container & Grid Layout */
+        .container {
+            max-width: 1200px; /* Widened to fit two columns comfortably */
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .page-header h2 {
+            color: #333;
+            font-size: 28px;
+            margin: 0;
+        }
+        .page-header p {
+            color: #666;
+            margin-top: 5px;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            gap: 25px; /* Space between cards */
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-title {
+            font-size: 22px;
+            color: #d35400; 
+            border-bottom: 2px solid #e0e6ed;
+            padding-bottom: 12px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .card-title span {
+            margin-right: 10px;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #e0e6ed;
+            text-align: left;
+            font-size: 15px;
+        }
+        table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            width: 35%;
+            color: #444;
+        }
+        table td a {
+            color: #d35400;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        table td a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer Styling */
+        .footer {
+            background-color: #d35400; 
+            color: #ffffff; 
+            text-align: center;
+            padding: 25px 15px;
+            font-size: 15px;
+            margin-top: 40px;
+        }
+        .footer a {
+            color: #ffffff; 
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .footer-bottom {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e67e22; 
+            font-size: 12px;
+            color: #ffffff; 
+        }
+
+        /* Responsive Design */
+        @media (max-width: 850px) {
+            .row {
+                grid-template-columns: 1fr; /* Stack into 1 column on smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Logo Bar -->
+    <div class="top-bar">
+        <!-- Government of India Logo -->
+        <img src="India_logo.jfif" alt="Government of India Logo">
+    </div>
+
+    <!-- Header Section -->
+    <header class="header">
+        <h3>Government of West Bengal</h3>
+        <h1>Harishchandrapur-I Development Block</h1>
+        <p>📍 Malda District, West Bengal</p>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="container">
+        
+        <div class="page-header">
+            <h2>About Us</h2>
+            <p>Official contact and postal details for the Block Development Office</p>
+        </div>
+
+        <!-- Grid Row for Side-by-Side Layout -->
+        <div class="row">
+            
+            <!-- Postal Address Card -->
+            <div class="card">
+                <h2 class="card-title"><span>🏢</span> Official Postal Address</h2>
+                
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Office Name</th>
+                            <td>Office of the Block Development Officer</td>
+                        </tr>
+                        <tr>
+                            <th>Block Name</th>
+                            <td>Harishchandrapur-I Development Block</td>
+                        </tr>
+                        <tr>
+                            <th>Post Office (P.O.)</th>
+                            <td>Harishchandrapur</td>
+                        </tr>
+                        <tr>
+                            <th>Police Station (P.S.)</th>
+                            <td>Harishchandrapur</td>
+                        </tr>
+                        <tr>
+                            <th>District</th>
+                            <td>Malda</td>
+                        </tr>
+                        <tr>
+                            <th>State</th>
+                            <td>West Bengal</td>
+                        </tr>
+                        <tr>
+                            <th>PIN Code</th>
+                            <td><strong>732125</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Contact Information Card -->
+            <div class="card">
+                <h2 class="card-title"><span>📞</span> Contact Information</h2>
+                
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Email ID</th>
+                            <td>
+                                <a href="mailto:bdoharishchandrapur1@gmail.com">bdoharishchandrapur1@gmail.com</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Contact Number</th>
+                            <td>Available at Office</td>
+                        </tr>
+                        <tr>
+                            <th>District Website</th>
+                            <td>
+                                <a href="https://malda.gov.in" target="_blank">malda.gov.in</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Office Timing</th>
+                            <td>10:00 AM to 05:30 PM</td>
+                        </tr>
+                        <tr>
+                            <th>Working Days</th>
+                            <td>Monday to Friday<br><span style="font-size: 13px; color: #666; font-weight: normal;">(Closed on Sat, Sun & Govt Holidays)</span></td>
+                        </tr>
+                        <tr>
+                            <th>BDO Office Location</th>
+                            <td>Located near Harishchandrapur Block Headquarter</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+
+    <footer class="footer">
+        <div>
+            <a href="index.html">🏠 Home</a> | 
+            <a href="location.html">📍 Location Map</a> |
+            <a href="#">Next →</a>
+        </div>
+        <div class="footer-bottom">
+            <p><strong>Harishchandrapur-I Development Block</strong> | Government of West Bengal</p>
+            <p>© 2026 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

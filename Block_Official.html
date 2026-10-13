@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Block Administration Directory | Harishchandrapur-I</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBsv8pXm3nuLDwTWo6R_Yu0AquHGaZ2vqw",
+        authDomain: "hcp1-b92cf.firebaseapp.com",
+        databaseURL: "https://hcp1-b92cf-default-rtdb.firebaseio.com",
+        projectId: "hcp1-b92cf",
+        storageBucket: "hcp1-b92cf.firebasestorage.app",
+        messagingSenderId: "734442156416",
+        appId: "1:734442156416:web:ecb056f3bd1b52039a5165",
+        measurementId: "G-PKYD293JCJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-hcp1-app';
+
+    window.db = db;
+    window.appId = appId;
+    window.auth = auth;
+    window.firebaseModules = { collection, onSnapshot, addDoc, deleteDoc, doc };
+
+    signInAnonymously(auth).then(() => {
+        console.log("Firebase authenticated successfully");
+        if (window.initDirectoryFirestore) {
+            window.initDirectoryFirestore();
+        }
+    }).catch((err) => {
+        console.warn("Firebase Auth Warning / Fallback mode active:", err.message);
+        if (window.loadDefaultDirectory) {
+            window.loadDefaultDirectory();
+        }
+    });
+</script>
+<style>
+body {    
+    background: #f4f7fb;    
+    font-family: Segoe UI, Arial, sans-serif;
+}
+/* Orange Gradient Header */
+.page-header {    
+    background: linear-gradient(135deg, #d35400, #e67e22);    
+    color: #fff;    
+    padding: 30px;    
+    border-radius: 12px;    
+    margin: 25px 0;
+    box-shadow: 0 4px 15px rgba(211, 84, 0, 0.2);
+}
+.page-card {    
+    border: none;    
+    border-radius: 12px;    
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    overflow: hidden;
+}
+/* Custom Orange Card Header */
+.card-header-orange {
+    background-color: #d35400;
+    color: white;
+    padding: 15px 20px;
+    border-bottom: none;
+}
+.section-title {    
+    color: #d35400;    
+    font-weight: 700;
+}
+/* Directory Table Styling */
+.table th {
+    background: #e67e22 !important;
+    color: white !important;
+    vertical-align: middle;
+    padding: 12px;
+}
+.table td {
+    vertical-align: middle;
+    padding: 12px;
+}
+.table-hover tbody tr:hover {
+    background: #fff3e0;
+}
+.badge-sl {
+    background: #e67e22;
+    font-size: 14px;
+    padding: 6px 10px;
+}
+/* Custom Orange Button */
+.btn-orange {
+    background-color: #d35400;
+    color: white;
+    border: none;
+    transition: all 0.3s;
+}
+.btn-orange:hover {
+    background-color: #b34700;
+    color: white;
+    transform: translateY(-2px);
+}
+footer {    
+    margin-top: 40px;
+}
+.search-box {
+    border: 2px solid #ffedd5;
+    border-radius: 20px;
+    padding: 5px 15px;
+}
+.search-box:focus {
+    border-color: #d35400;
+    box-shadow: 0 0 5px rgba(211, 84, 0, 0.5);
+}
+</style>
+</head>
+<body>
+<div class="container">
+    
+    <!-- Top Header Banner -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-md-9">
+                <h2>
+                    <i class="fas fa-sitemap me-2"></i>
+                    Harishchandrapur-I Development Block
+                </h2>
+                <p class="mb-0 fs-5">
+                    Block Administrative Setup & Officials Directory
+                </p>
+                <p class="mb-0 small opacity-75">District: Malda | Government of West Bengal</p>
+            </div>
+            <div class="col-md-3 text-end d-none d-md-block">
+                <i class="fas fa-users-cog fa-4x opacity-50"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="../index.php" style="color: #d35400; text-decoration: none;"><i class="fas fa-home"></i> Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Officials Directory</li>
+        </ol>
+    </nav>
+
+    <!-- Main Directory Card -->
+    <div class="card page-card mb-5">
+        <div class="card-header-orange d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <h4 class="mb-0">
+                <i class="fas fa-address-book me-2"></i> Administrative Directory
+            </h4>
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-search me-2"></i>
+                    <input type="text" id="searchInput" class="form-control search-box" placeholder="Search by name or designation...">
+                </div>
+                <button class="btn btn-light text-dark fw-bold btn-sm rounded-pill px-3 shadow-sm" data-bs-toggle="modal" data-bs-target="#addOfficialModal">
+                    <i class="fas fa-plus me-1 text-warning"></i> Add Official
+                </button>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover mb-0" id="directoryTable">
+                    <thead>
+                        <tr>
+                            <th width="80" class="text-center">Sl No.</th>
+                            <th>Name of the Officer</th>
+                            <th>Designation</th>
+                            <th>Department / Section</th>
+                            <th width="150">Contact Info</th>
+                        </tr>
+                    </thead>
+                    <tbody id="directoryTableBody">
+                        <!-- Loaded dynamically via Firebase -->
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">Connecting to database & loading officials...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-light text-center py-3">
+            <a href="index.html" class="btn btn-orange px-4 rounded-pill">
+                <i class="fas fa-arrow-left me-2"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Search Filter Script -->
+<script>
+    document.getElementById("searchInput").addEventListener("keyup", function() {
+        var value = this.value.toLowerCase();
+        var rows = document.querySelectorAll("#directoryTable tbody tr");
+        rows.forEach(function(row) {
+            var text = row.innerText.toLowerCase();
+            row.style.display = text.indexOf(value) > -1 ? "" : "none";
+        });
+    });
+
+    // Custom Modal for Messages (instead of alert)
+    function showCustomModal(title, message) {
+        let existingModal = document.getElementById('customMsgModal');
+        if (existingModal) existingModal.remove();
+
+        const modalHtml = `
+        <div class="modal fade" id="customMsgModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg border-0 rounded-4">
+              <div class="modal-header bg-warning text-dark border-0">
+                <h5 class="modal-title fw-bold"><i class="fas fa-info-circle me-2"></i>${title}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body p-4 fs-6 text-secondary">
+                ${message}
+              </div>
+              <div class="modal-footer border-0">
+                <button type="button" class="btn btn-orange rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        const myModal = new bootstrap.Modal(document.getElementById('customMsgModal'));
+        myModal.show();
+    }
+
+    // Default static entries if DB is empty
+    const defaultOfficials = [
+        { sl: 1, name: "Shri Dhrubashis Samanta, WBCS (Exe.)", designation: "Block Development Officer (BDO)", department: "Block Administration", contact: "harishchandrapur1@gmail.com", isEmail: true },
+        { sl: 2, name: "Shri Arindam Das", designation: "Joint Block Development Officer", department: "Block Administration", contact: "harishchandrapur1@gmail.com", isEmail: true },
+        { sl: 3, name: "Sabhapati", designation: "Panchayat Samiti Sabhapati", department: "Panchayat Samiti", contact: "Contact Available", isEmail: false },
+        { sl: 4, name: "Dr. Sourav Sarkar", designation: "Block Medical Officer of Health (BMOH)", department: "Health & Family Welfare", contact: "Contact Available", isEmail: false },
+        { sl: 5, name: "Shri Anup Ghosh", designation: "Inspector-in-Charge", department: "Harishchandrapur Police Station", contact: "police.html", isLink: true },
+        { sl: 6, name: "Block Agriculture Officer", designation: "Assistant Director of Agriculture (ADA)", department: "Agriculture Department", contact: "harishchandrapur1@gmail.com", isEmail: true },
+        { sl: 7, name: "Block Land & Land Reforms Officer", designation: "BL&LRO", department: "Land & Land Reforms", contact: "harishchandrapur1@gmail.com", isEmail: true }
+    ];
+
+    window.loadDefaultDirectory = function() {
+        let tbody = document.getElementById('directoryTableBody');
+        tbody.innerHTML = '';
+        defaultOfficials.forEach((item, index) => {
+            let contactBtn = '';
+            if (item.isLink) {
+                contactBtn = `<a href="${item.contact}" class="btn btn-sm btn-orange" title="View Details"><i class="fas fa-eye"></i></a>`;
+            } else if (item.isEmail || (item.contact && item.contact.includes('@'))) {
+                contactBtn = `<button class="btn btn-sm btn-outline-secondary" title="View Contact" onclick="showCustomModal('Official Contact', 'Email: ${item.contact}')"><i class="fas fa-envelope text-primary"></i></button>`;
+            } else {
+                contactBtn = `<button class="btn btn-sm btn-outline-secondary" title="View Contact" onclick="showCustomModal('Official Contact', 'Contact Info: ${item.contact || "Available at Block Office"}')"><i class="fas fa-phone text-success"></i></button>`;
+            }
+
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="text-center"><span class="badge badge-sl rounded-pill">${index + 1}</span></td>
+                <td class="fw-bold">${item.name || ''}</td>
+                <td>${item.designation || ''}</td>
+                <td>${item.department || ''}</td>
+                <td class="text-center">
+                    ${contactBtn}
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    };
+
+    window.initDirectoryFirestore = function() {
+        const { collection, onSnapshot, addDoc } = window.firebaseModules;
+        const db = window.db;
+        const appId = window.appId;
+        const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'officials_directory');
+
+        onSnapshot(colRef, (snapshot) => {
+            let docsData = [];
+            snapshot.forEach((docSnap) => {
+                docsData.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            // If empty, seed default records
+            if (docsData.length === 0) {
+                defaultOfficials.forEach(official => {
+                    addDoc(colRef, official).catch(err => console.log("Seeding error:", err));
+                });
+                return;
+            }
+
+            // Sort by sl or name
+            docsData.sort((a, b) => (a.sl || 99) - (b.sl || 99));
+
+            let tbody = document.getElementById('directoryTableBody');
+            tbody.innerHTML = '';
+
+            docsData.forEach((item, index) => {
+                let contactBtn = '';
+                if (item.isLink) {
+                    contactBtn = `<a href="${item.contact}" class="btn btn-sm btn-orange" title="View Details"><i class="fas fa-eye"></i></a>`;
+                } else if (item.isEmail || (item.contact && item.contact.includes('@'))) {
+                    contactBtn = `<button class="btn btn-sm btn-outline-secondary" title="View Contact" onclick="showCustomModal('Official Contact', 'Email: ${item.contact}')"><i class="fas fa-envelope text-primary"></i></button>`;
+                } else {
+                    contactBtn = `<button class="btn btn-sm btn-outline-secondary" title="View Contact" onclick="showCustomModal('Official Contact', 'Contact Info: ${item.contact || "Available at Block Office"}')"><i class="fas fa-phone text-success"></i></button>`;
+                }
+
+                let tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="text-center"><span class="badge badge-sl rounded-pill">${index + 1}</span></td>
+                    <td class="fw-bold">${item.name || ''}</td>
+                    <td>${item.designation || ''}</td>
+                    <td>${item.department || ''}</td>
+                    <td class="text-center">
+                        ${contactBtn}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }, (error) => {
+            console.warn("Firestore listener error, falling back to static view:", error);
+            window.loadDefaultDirectory();
+        });
+    };
+
+    // Handle Add Official Form Submission
+    function handleAddOfficial(e) {
+        e.preventDefault();
+        const name = document.getElementById('newName').value;
+        const designation = document.getElementById('newDesignation').value;
+        const department = document.getElementById('newDepartment').value;
+        const contact = document.getElementById('newContact').value;
+
+        if (!window.firebaseModules || !window.db) {
+            showCustomModal("Error", "Database not initialized yet. Please wait a second.");
+            return;
+        }
+
+        const { collection, addDoc } = window.firebaseModules;
+        const colRef = collection(window.db, 'artifacts', window.appId, 'public', 'data', 'officials_directory');
+
+        addDoc(colRef, {
+            sl: Date.now(),
+            name: name,
+            designation: designation,
+            department: department,
+            contact: contact,
+            isEmail: contact.includes('@')
+        }).then(() => {
+            document.getElementById('addOfficialForm').reset();
+            const modalEl = document.getElementById('addOfficialModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+            showCustomModal("Success", "New official successfully added to the live directory!");
+        }).catch(err => {
+            showCustomModal("Error", "Could not add official: " + err.message);
+        });
+    }
+</script>
+
+<!-- Add Official Modal -->
+<div class="modal fade" id="addOfficialModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0 rounded-4">
+      <div class="modal-header bg-orange text-white" style="background-color: #d35400;">
+        <h5 class="modal-title fw-bold text-white"><i class="fas fa-user-plus me-2"></i>Add New Official</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="addOfficialForm" onsubmit="handleAddOfficial(event)">
+          <div class="modal-body p-4">
+              <div class="mb-3">
+                  <label class="form-label fw-bold small">Officer Name</label>
+                  <input type="text" id="newName" class="form-control" required placeholder="e.g. Shri Subrata Mukherjee">
+              </div>
+              <div class="mb-3">
+                  <label class="form-label fw-bold small">Designation</label>
+                  <input type="text" id="newDesignation" class="form-control" required placeholder="e.g. Panchayat Secretary">
+              </div>
+              <div class="mb-3">
+                  <label class="form-label fw-bold small">Department / Section</label>
+                  <input type="text" id="newDepartment" class="form-control" required placeholder="e.g. Gram Panchayat Section">
+              </div>
+              <div class="mb-3">
+                  <label class="form-label fw-bold small">Contact Info (Email or Phone)</label>
+                  <input type="text" id="newContact" class="form-control" required placeholder="e.g. hcp1@wb.gov.in">
+              </div>
+          </div>
+          <div class="modal-footer border-0 bg-light p-3">
+              <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-orange rounded-pill px-4">Save Official</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+/* =====================================================
+PROFESSIONAL FOOTER
+===================================================== */
+.gov-footer {
+    margin-top: 30px;
+    background: linear-gradient(135deg, #a04000, #d35400, #e67e22);
+    border-top: 4px solid #f39c12;
+    padding: 20px 30px;
+    color: #ffffff;
+    box-shadow: 0 -8px 25px rgba(0,0,0,.08);
+}
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.footer-logo {
+    width: 52px;    
+    height: 52px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f39c12;
+    font-size: 22px;
+}
+.footer-title {
+    font-size: 18px;
+    font-weight: 700;
+}
+.footer-sub {
+    font-size: 12px;
+    color: #ffedd5;
+    letter-spacing: 1px;
+}
+.footer-right {
+    font-size: 14px;
+    color: #ffedd5;
+}
+@media(max-width: 768px) {
+    .footer-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-left {
+        flex-direction: column;
+    }
+}
+</style>
+
+<!-- =====================================================
+FOOTER
+===================================================== -->
+<footer class="gov-footer">
+    <div class="footer-inner">
+        <div class="footer-left">
+            <div class="footer-logo">
+                <i class="fas fa-landmark"></i>
+            </div>
+            <div>
+                <div class="footer-title">Harishchandrapur-I Development Block</div>
+                <div class="footer-sub">District: Malda | Government of West Bengal</div>
+            </div>
+        </div>
+        <div class="footer-right">
+            © 2026 All Rights Reserved
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

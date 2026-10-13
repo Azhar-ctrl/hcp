@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Harishchandrapur-I Dev. Block, Malda</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-animate {
+            animation: fadeIn 0.2s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-[#fffaf5] text-[#333] min-h-screen p-4 sm:p-8 flex flex-col justify-between">
+
+    <div id="customModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 modal-animate border-t-4 border-[#d65108]">
+            <div id="modalIcon" class="text-3xl text-[#d65108] mb-3"></div>
+            <h3 id="modalTitle" class="text-lg font-bold text-gray-900 mb-2">Notification</h3>
+            <p id="modalMessage" class="text-gray-600 mb-6 text-sm whitespace-pre-line"></p>
+            <div id="modalButtons" class="flex justify-end gap-3">
+                <button id="modalOkBtn" class="bg-[#d65108] hover:bg-[#b54306] text-white px-5 py-2 rounded-lg font-medium text-sm transition shadow">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white w-full max-w-6xl mx-auto p-4 sm:p-8 rounded-2xl shadow-[0_4px_20px_rgba(214,81,8,0.12)] border border-[#fae1d1]">
+        
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 mb-6 border-b-2 border-[#d65108]">
+            <div class="flex items-center gap-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem" class="w-12 h-auto">
+                <div>
+                    <h1 class="text-2xl font-bold text-[#d65108]">Admin Dashboard</h1>
+                    <span class="text-xs sm:text-sm text-gray-500 font-bold tracking-wide">Harishchandrapur-I Development Block, Malda</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                <span id="authStatus" class="hidden"></span>
+                <button id="addUserBtn" class="bg-[#d65108] hover:bg-[#b54306] text-white px-4 py-2.5 rounded-lg text-sm font-bold shadow transition flex items-center gap-2">
+                    <i class="fas fa-plus"></i> Add New User
+                </button>
+            </div>
+        </div>
+
+        <!-- Data Table Wrapper -->
+        <div class="overflow-x-auto rounded-xl border border-gray-100 shadow-sm">
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-[#d65108] text-white text-left text-sm font-semibold">
+                        <th class="p-4">Name</th>
+                        <th class="p-4">Mobile Number</th>
+                        <th class="p-4">Designation</th>
+                        <th class="p-4">Email Address</th>
+                        <th class="p-4">Password</th>
+                        <th class="p-4" style="min-width: 260px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody" class="divide-y divide-[#f0e6df]">
+                    <!-- Populated dynamically via Firebase or Local Storage Fallback -->
+                    <tr><td colspan="6" class="text-center p-8 text-gray-500 italic">Initializing database...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#c85a06] text-white text-center py-6 px-4 mt-12 rounded-xl shadow-md w-full max-w-6xl mx-auto">
+        <p class="font-bold text-sm sm:text-base">Harishchandrapur-I Development Block | Government of West Bengal</p>
+        <p class="text-xs sm:text-sm opacity-90 mt-1">&copy; 2026 All Rights Reserved.</p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsv8pXm3nuLDwTWo6R_Yu0AquHGaZ2vqw",
+            authDomain: "hcp1-b92cf.firebaseapp.com",
+            databaseURL: "https://hcp1-b92cf-default-rtdb.firebaseio.com",
+            projectId: "hcp1-b92cf",
+            storageBucket: "hcp1-b92cf.firebasestorage.app",
+            messagingSenderId: "734442156416",
+            appId: "1:734442156416:web:ecb056f3bd1b52039a5165",
+            measurementId: "G-PKYD293JCJ"
+        };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'hcp1-admin-portal';
+
+        let app, auth, db;
+        let useLocalStorageFallback = false;
+        let currentUser = null;
+        let isAddingOrEditing = false;
+        const tableBody = document.getElementById('tableBody');
+        const authStatus = document.getElementById('authStatus');
+
+        window.showModal = function(title, message, iconClass = "fas fa-info-circle", showCancel = false, onConfirm = null) {
+            const modal = document.getElementById('customModal');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+            document.getElementById('modalIcon').innerHTML = `<i class="${iconClass}"></i>`;
+            
+            const btnContainer = document.getElementById('modalButtons');
+            btnContainer.innerHTML = '';
+
+            if (showCancel) {
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium text-sm transition';
+                cancelBtn.innerText = 'Cancel';
+                cancelBtn.onclick = () => modal.classList.add('hidden');
+                btnContainer.appendChild(cancelBtn);
+            }
+
+            const okBtn = document.createElement('button');
+            okBtn.className = 'bg-[#d65108] hover:bg-[#b54306] text-white px-5 py-2 rounded-lg font-medium text-sm transition shadow';
+            okBtn.innerText = showCancel ? 'Confirm' : 'OK';
+            okBtn.onclick = () => {
+                modal.classList.add('hidden');
+                if (onConfirm) onConfirm();
+            };
+            btnContainer.appendChild(okBtn);
+
+            modal.classList.remove('hidden');
+        };
+
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+        } catch (e) {
+            console.warn("Firebase initialization error, switching to local mode:", e);
+            useLocalStorageFallback = true;
+        }
+
+        async function initAuth() {
+            if (useLocalStorageFallback || !auth) {
+                activateFallbackMode();
+                return;
+            }
+
+            try {
+                await setPersistence(auth, browserLocalPersistence);
+
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.warn("Authentication restricted or offline. Enabling localStorage fallback...", err);
+                activateFallbackMode();
+            }
+        }
+
+        function activateFallbackMode() {
+            useLocalStorageFallback = true;
+            loadLocalUsers();
+        }
+
+        if (auth) {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    currentUser = user;
+                    setupRealtimeListener();
+                } else if (!useLocalStorageFallback && !currentUser) {
+                    currentUser = { uid: "guest-admin" };
+                    setupRealtimeListener();
+                }
+            });
+        }
+
+        function setupRealtimeListener() {
+            if (useLocalStorageFallback) return;
+
+            const usersColRef = collection(db, 'artifacts', appId, 'public', 'data', 'block_users');
+            
+            onSnapshot(usersColRef, (snapshot) => {
+                let users = [];
+                snapshot.forEach(docSnap => {
+                    users.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderUsersTable(users);
+            }, (error) => {
+                console.warn("Firestore permissions or network error encountered. Switching to local persistence mode to ensure uninterrupted operation:", error);
+                activateFallbackMode();
+            });
+        }
+
+        function loadLocalUsers() {
+            try {
+                const stored = localStorage.getItem('hcp1_block_users');
+                const users = stored ? JSON.parse(stored) : [];
+                renderUsersTable(users);
+            } catch (e) {
+                renderUsersTable([]);
+            }
+        }
+
+        function saveLocalUser(userData) {
+            try {
+                const stored = localStorage.getItem('hcp1_block_users');
+                let users = stored ? JSON.parse(stored) : [];
+                const index = users.findIndex(u => u.mobile === userData.mobile);
+                if (index >= 0) {
+                    users[index] = userData;
+                } else {
+                    users.push(userData);
+                }
+                localStorage.setItem('hcp1_block_users', JSON.stringify(users));
+                loadLocalUsers();
+            } catch (e) {
+                console.error("Local storage save error", e);
+            }
+        }
+
+        function deleteLocalUser(mobile) {
+            try {
+                const stored = localStorage.getItem('hcp1_block_users');
+                let users = stored ? JSON.parse(stored) : [];
+                users = users.filter(u => u.mobile !== mobile);
+                localStorage.setItem('hcp1_block_users', JSON.stringify(users));
+                loadLocalUsers();
+            } catch (e) {
+                console.error("Local storage delete error", e);
+            }
+        }
+
+        function renderUsersTable(users) {
+            if (isAddingOrEditing) return;
+
+            tableBody.innerHTML = '';
+            if (users.length === 0) {
+                tableBody.innerHTML = `<tr id="emptyMessageRow"><td colspan="6" class="text-center py-8 text-[#d65108] italic"><i class="fas fa-info-circle"></i> No registered users found. Click "Add New User" above.</td></tr>`;
+                return;
+            }
+
+            users.forEach(userData => {
+                const tr = document.createElement('tr');
+                tr.id = `row-${userData.mobile}`;
+                tr.className = "hover:bg-[#fff4ec] transition-colors";
+
+                const userDesignation = userData.designation || '<span class="text-gray-400">N/A</span>';
+                const userEmail = userData.email || '<span class="text-gray-400">N/A</span>';
+                const userPassword = userData.password || userData.pin || '';
+
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-gray-800">${escapeHtml(userData.name)}</td>
+                    <td class="p-4 text-gray-600">${escapeHtml(userData.mobile)}</td>
+                    <td class="p-4 text-gray-600">${escapeHtml(userData.designation || '')}</td>
+                    <td class="p-4 text-gray-600">${escapeHtml(userData.email || '')}</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-2">
+                            <input type="password" id="displayPwd-${userData.mobile}" value="${escapeAttr(userPassword)}" readonly class="font-mono bg-[#fdf5f0] text-[#d65108] px-2.5 py-1 rounded border border-[#fae1d1] tracking-wider text-xs w-28 focus:outline-none">
+                            <button type="button" class="text-gray-500 hover:text-[#d65108] transition" onclick="togglePasswordVisibility('displayPwd-${userData.mobile}', 'eyeIcon-${userData.mobile}')" title="Toggle Password">
+                                <i id="eyeIcon-${userData.mobile}" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td class="p-4 flex gap-2 flex-wrap items-center">
+                        <button class="bg-[#ffc107] hover:bg-[#ffca2c] text-black px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow-sm" onclick="editUser('${userData.mobile}', '${escapeAttr(userData.name)}', '${escapeAttr(userData.designation)}', '${escapeAttr(userData.email || '')}', '${escapeAttr(userPassword)}')" title="Edit User">
+                            <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <button class="bg-[#e57e42] hover:bg-[#cf682c] text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow-sm" onclick="sendSavedPin('${escapeAttr(userData.email || '')}', '${escapeAttr(userData.name)}', '${escapeAttr(userPassword)}')" title="Send Password">
+                            <i class="fas fa-paper-plane"></i> Send Password
+                        </button>
+                        <button class="bg-[#dc3545] hover:bg-[#bb2d3b] text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow-sm" onclick="deleteUser('${userData.mobile}')" title="Delete User">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('addUserBtn').addEventListener('click', () => {
+            if (isAddingOrEditing) {
+                showModal("Notice", "Please save or cancel your current action first.", "fas fa-exclamation-circle");
+                return;
+            }
+            isAddingOrEditing = true;
+            const emptyMsg = document.getElementById('emptyMessageRow');
+            if (emptyMsg) emptyMsg.remove();
+
+            const tr = document.createElement('tr');
+            tr.className = "bg-[#fff9f5]";
+            tr.innerHTML = `
+                <td class="p-3">
+                    <input type="text" id="newName" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" placeholder="Full Name" oninput="this.value = this.value.replace(/[^a-zA-Z\\s]/g, ''); validateField('newName', 3)" required>
+                </td>
+                <td class="p-3">
+                    <input type="tel" id="newMobile" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" maxlength="10" placeholder="10-digit Mobile" oninput="this.value = this.value.replace(/\\D/g, '').slice(0, 10); validateField('newMobile', 10, true)" required>
+                </td>
+                <td class="p-3">
+                    <input type="text" id="newDesignation" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" placeholder="Designation" oninput="this.value = this.value.replace(/[^a-zA-Z\\s]/g, ''); validateField('newDesignation', 3)" required>
+                </td>
+                <td class="p-3"><input type="email" id="newEmail" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" placeholder="Email Address" required></td>
+                <td class="p-3">
+                    <div class="flex items-center relative">
+                        <input type="password" id="newPassword" class="w-full p-2 pr-8 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" placeholder="Password" required>
+                        <button type="button" class="absolute right-2 text-gray-500 hover:text-[#d65108]" onclick="togglePasswordVisibility('newPassword', 'newEyeIcon')">
+                            <i id="newEyeIcon" class="fas fa-eye text-xs"></i>
+                        </button>
+                    </div>
+                </td>
+                <td class="p-3 flex gap-2 items-center">
+                    <button class="bg-[#198754] hover:bg-[#157347] text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow-sm" onclick="saveNewUser()"><i class="fas fa-save"></i> Save</button>
+                    <button class="bg-[#6c757d] hover:bg-[#5c636a] text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow-sm" onclick="cancelAction()"><i class="fas fa-times"></i> Cancel</button>
+                </td>
+            `;
+            tableBody.insertBefore(tr, tableBody.firstChild);
+        });
+
+        window.validateField = function(inputId, minLen, isNumeric = false) {
+            const input = document.getElementById(inputId);
+            if (!input) return true;
+
+            const val = input.value.trim();
+            let isValid = true;
+
+            if (isNumeric) {
+                if (val.length !== minLen || !/^\d+$/.test(val)) {
+                    isValid = false;
+                }
+            } else {
+                if (val.length < minLen) {
+                    isValid = false;
+                }
+            }
+
+            if (!isValid && val.length > 0) {
+                input.classList.add('border-red-500');
+            } else {
+                input.classList.remove('border-red-500');
+            }
+            return isValid;
+        };
+
+        window.saveNewUser = async function() {
+            const nameInput = document.getElementById('newName');
+            const mobileInput = document.getElementById('newMobile');
+            const desigInput = document.getElementById('newDesignation');
+            
+            const name = nameInput ? nameInput.value.trim() : '';
+            const mobile = mobileInput ? mobileInput.value.trim() : '';
+            const designation = desigInput ? desigInput.value.trim() : '';
+            const email = document.getElementById('newEmail').value.trim();
+            const password = document.getElementById('newPassword').value.trim();
+
+            if (!name || !mobile || !designation || !email || !password) {
+                showModal("Validation Error", "Please fill in all required fields.", "fas fa-exclamation-triangle");
+                return;
+            }
+            if (name.length < 3) {
+                nameInput.classList.add('border-red-500');
+                showModal("Validation Error", "Name must be at least 3 characters long.", "fas fa-exclamation-triangle");
+                return;
+            }
+            if (mobile.length !== 10 || isNaN(mobile)) {
+                mobileInput.classList.add('border-red-500');
+                showModal("Validation Error", "Please enter a valid 10-digit mobile number.", "fas fa-exclamation-triangle");
+                return;
+            }
+            if (designation.length < 3) {
+                desigInput.classList.add('border-red-500');
+                showModal("Validation Error", "Designation must be at least 3 characters long.", "fas fa-exclamation-triangle");
+                return;
+            }
+            if (!isValidEmail(email)) {
+                showModal("Validation Error", "Please enter a valid email address.", "fas fa-exclamation-triangle");
+                return;
+            }
+
+            const userData = {
+                name,
+                mobile,
+                designation,
+                email,
+                password,
+                updatedAt: new Date().toISOString()
+            };
+
+            isAddingOrEditing = false;
+
+            if (useLocalStorageFallback) {
+                saveLocalUser(userData);
+                return;
+            }
+
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'block_users', mobile);
+                await setDoc(docRef, userData);
+                // Immediately update view with the saved data
+                setupRealtimeListener();
+            } catch (err) {
+                console.warn("Firestore write error, falling back to local save:", err);
+                activateFallbackMode();
+                saveLocalUser(userData);
+            }
+        };
+
+        window.editUser = function(mobile, name, designation, email, password) {
+            if (isAddingOrEditing) {
+                showModal("Notice", "Please save or cancel your current action first.", "fas fa-exclamation-circle");
+                return;
+            }
+            isAddingOrEditing = true;
+            const tr = document.getElementById(`row-${mobile}`);
+            if (!tr) return;
+
+            tr.innerHTML = `
+                <td class="p-3">
+                    <input type="text" id="editName-${mobile}" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" value="${escapeAttr(name)}" oninput="this.value = this.value.replace(/[^a-zA-Z\\s]/g, ''); validateField('editName-${mobile}', 3)">
+                </td>
+                <td class="p-3"><input type="tel" id="editMobile-${mobile}" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" value="${escapeAttr(mobile)}" readonly disabled></td>
+                <td class="p-3">
+                    <input type="text" id="editDesignation-${mobile}" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" value="${escapeAttr(designation)}" oninput="this.value = this.value.replace(/[^a-zA-Z\\s]/g, ''); validateField('editDesignation-${mobile}', 3)">
+                </td>
+                <td class="p-3"><input type="email" id="editEmail-${mobile}" class="w-full p-2 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" value="${escapeAttr(email)}"></td>
+                <td class="p-3">
+                    <div class="flex items-center relative">
+                        <input type="password" id="editPassword-${mobile}" class="w-full p-2 pr-8 border border-gray-300 rounded focus:border-[#d65108] focus:outline-none text-sm" value="${escapeAttr(password)}">
+                        <button type="button" class="absolute right-2 text-gray-500 hover:text-[#d65108]" onclick="togglePasswordVisibility('editPassword-${mobile}', 'editEyeIcon-${mobile}')">
+                            <i id="editEyeIcon-${mobile}" class="fas fa-eye text-xs"></i>
+                        </button>
+                    </div>
+                </td>
+                <td class="p-3 flex gap-2 items-center">
+                    <button class="bg-[#198754] hover:bg-[#157347] text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow-sm" onclick="updateUser('${mobile}')"><i class="fas fa-save"></i> Update</button>
+                    <button class="bg-[#6c757d] hover:bg-[#5c636a] text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow-sm" onclick="cancelAction()"><i class="fas fa-times"></i> Cancel</button>
+                </td>
+            `;
+        };
+
+        window.updateUser = async function(mobile) {
+            const name = document.getElementById(`editName-${mobile}`).value.trim();
+            const designation = document.getElementById(`editDesignation-${mobile}`).value.trim();
+            const email = document.getElementById(`editEmail-${mobile}`).value.trim();
+            const password = document.getElementById(`editPassword-${mobile}`).value.trim();
+
+            if (!name || !designation || !email || !password) {
+                showModal("Validation Error", "All fields must be filled.", "fas fa-exclamation-triangle");
+                return;
+            }
+            if (name.length < 3) {
+                showModal("Validation Error", "Name must be at least 3 characters long.", "fas fa-exclamation-triangle");
+                return;
+            }
+            if (designation.length < 3) {
+                showModal("Validation Error", "Designation must be at least 3 characters long.", "fas fa-exclamation-triangle");
+                return;
+            }
+            if (!isValidEmail(email)) {
+                showModal("Validation Error", "Please enter a valid email address.", "fas fa-exclamation-triangle");
+                return;
+            }
+
+            const userData = {
+                name,
+                mobile,
+                designation,
+                email,
+                password,
+                updatedAt: new Date().toISOString()
+            };
+
+            isAddingOrEditing = false;
+
+            if (useLocalStorageFallback) {
+                saveLocalUser(userData);
+                return;
+            }
+
+            try {
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'block_users', mobile);
+                await setDoc(docRef, userData, { merge: true });
+                setupRealtimeListener();
+            } catch (err) {
+                console.warn("Firestore update error, saving locally:", err);
+                activateFallbackMode();
+                saveLocalUser(userData);
+            }
+        };
+
+        window.deleteUser = function(mobile) {
+            // Find the user name from the table row if available, or fall back to mobile
+            const tr = document.getElementById(`row-${mobile}`);
+            let userName = mobile;
+            if (tr) {
+                const nameTd = tr.querySelector('td:nth-child(1)');
+                if (nameTd) {
+                    userName = nameTd.innerText.trim();
+                }
+            }
+            showModal("Confirm Deletion", `Are you sure you want to delete user ${userName}?`, "fas fa-exclamation-triangle", true, async () => {
+                if (useLocalStorageFallback) {
+                    deleteLocalUser(mobile);
+                    showModal("Deleted", "User has been removed.", "fas fa-trash-alt");
+                    return;
+                }
+
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'block_users', mobile);
+                    await deleteDoc(docRef);
+                    showModal("Deleted", "User has been removed from the database.", "fas fa-trash-alt");
+                } catch (err) {
+                    console.warn("Firestore delete error, deleting locally:", err);
+                    deleteLocalUser(mobile);
+                    showModal("Deleted", "User has been removed.", "fas fa-trash-alt");
+                }
+            });
+        };
+
+        window.cancelAction = function() {
+            isAddingOrEditing = false;
+            if (useLocalStorageFallback) {
+                loadLocalUsers();
+            } else {
+                setupRealtimeListener();
+            }
+        };
+
+        window.sendSavedPin = function(email, name, password) {
+            const targetEmail = email && email.trim() !== '' ? email : 'registered email';
+            showModal("Email Simulation", `[Password Sent to Your Mail Successfully]`, "fas fa-paper-plane");
+        };
+
+        window.togglePasswordVisibility = function(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                input.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        };
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+        function escapeAttr(str) {
+            if (!str) return '';
+            return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        initAuth();
+    </script>
+</body>
+</html>

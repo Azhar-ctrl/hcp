@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harishchandrapur-I Dev. Block - Sign In</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #ffffff, #f0fdf4, #dcfce7, #f0fdf4, #ffffff);
+            background-size: 400% 400%;
+            animation: lightGreenGradientAnim 15s ease infinite;
+        }
+        
+        @keyframes lightGreenGradientAnim {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        @keyframes deepOrangeShimmer {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .animated-deep-orange-text {
+            background: linear-gradient(270deg, #ea580c, #c2410c, #f97316, #9a3412, #ea580c);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: deepOrangeShimmer 4s ease infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+
+    <div class="w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+        
+        <!-- Left Brand Section -->
+        <div class="flex flex-col items-center justify-center lg:items-start text-center lg:text-left gap-2 relative">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight transition-all duration-300">
+                <span id="titleText" class="animated-deep-orange-text relative inline-block">Harishchandrapur-I Dev. Block</span>
+            </h1>
+            <p class="text-sm text-gray-600 mt-2">Government of West Bengal</p>
+        </div>
+
+        <!-- Right Sign In Card (With Interactive Mouse Hover Moving 3D Tilt Animation) -->
+        <div id="loginCard" class="w-full max-w-md bg-white rounded-2xl shadow-[0_10px_35px_rgba(234,179,8,0.15)] border border-gray-100 p-8 sm:p-10 relative transition-transform duration-200 ease-out will-change-transform" style="transform-style: preserve-3d; perspective: 1000px;">
+            
+            <!-- Card Header -->
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Sign In</h2>
+            </div>
+
+            <!-- Login Form with Validation & Placeholders -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6" novalidate>
+                <!-- Identifier Field (Email or Mobile Number) -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">User ID</label>
+                    <input type="text" id="identifier" required placeholder="email@gmail.com or 10-digit mobile" 
+                        class="w-full px-4 py-3 bg-[#F8FAFC] border border-gray-200 rounded-xl text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F1E36] focus:bg-white transition-all">
+                    <p id="identifierError" class="text-xs text-red-500 mt-1 hidden">Please enter a valid email address or 10-digit mobile number.</p>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2">Password</label>
+                    <input type="password" id="password" required placeholder="••••••••" 
+                        class="w-full px-4 py-3 bg-[#F8FAFC] border border-gray-200 rounded-xl text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F1E36] focus:bg-white transition-all">
+                    <p id="passwordError" class="text-xs text-red-500 mt-1 hidden">Password must be at least 6 characters long.</p>
+                </div>
+
+                <!-- Sign In Button -->
+                <button type="submit" id="signInBtn"
+                    class="w-full py-3.5 bg-[#0A192F] hover:bg-[#132B4F] text-white font-semibold rounded-xl shadow-lg shadow-blue-950/10 transition-all duration-200 flex items-center justify-center text-sm">
+                    Sign In
+                </button>
+
+                <!-- Forgot Password Link -->
+                <div class="text-right pt-1">
+                    <a href="#forgot" onclick="openResetModal(event)" class="text-xs font-bold text-[#D97706] hover:text-amber-700 transition-colors">
+                        Forgot Password
+                    </a>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 shadow-[0_15px_40px_rgba(0,0,0,0.15)] border border-gray-100 relative text-left">
+            <h3 class="text-2xl font-extrabold text-gray-900 text-center mb-2">Reset Password</h3>
+            <p class="text-sm text-gray-500 text-center mb-6 leading-relaxed">Enter your account email address and we'll send you a secure password reset link.</p>
+            
+            <form onsubmit="handleResetPassword(event)" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Email Address</label>
+                    <input type="email" id="resetEmail" required placeholder="email@gmail.com" 
+                        class="w-full px-4 py-3.5 bg-[#F8FAFC] border border-gray-200 rounded-xl text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-[#D97706] focus:bg-white transition-all">
+                    <p id="resetEmailError" class="text-xs text-red-500 mt-1.5 hidden">Please enter a valid email address.</p>
+                </div>
+
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="button" onclick="closeResetModal()" 
+                        class="flex-1 py-3.5 bg-[#E2E8F0] hover:bg-[#CBD5E1] text-gray-700 font-semibold rounded-xl text-sm transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" id="sendResetBtn"
+                        class="flex-1 py-3.5 bg-[#D97706] hover:bg-[#B45309] text-white font-semibold rounded-xl text-sm shadow-md transition-all">
+                        Send Reset Link
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="messageModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl text-center space-y-4">
+            <div id="modalIcon" class="w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+            <h3 id="modalTitle" class="text-lg font-bold text-gray-900">Success</h3>
+            <p id="modalDesc" class="text-sm text-gray-600">You have successfully signed in.</p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-[#0A192F] text-white rounded-xl text-sm font-semibold hover:bg-blue-900 transition-colors">OK</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signInAnonymously, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Updated Firebase Configuration for HCP1-B92CF
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsv8pXm3nuLDwTWo6R_Yu0AquHGaZ2vqw",
+            authDomain: "hcp1-b92cf.firebaseapp.com",
+            databaseURL: "https://hcp1-b92cf-default-rtdb.firebaseio.com",
+            projectId: "hcp1-b92cf",
+            storageBucket: "hcp1-b92cf.firebasestorage.app",
+            messagingSenderId: "734442156416",
+            appId: "1:734442156416:web:ecb056f3bd1b52039a5165",
+            measurementId: "G-PKYD293JCJ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.firebaseAuth = auth;
+        window.firebaseDb = db;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signInAnonymously = signInAnonymously;
+        window.sendPasswordResetEmail = sendPasswordResetEmail;
+        window.firestoreAddDoc = addDoc;
+        window.firestoreCollection = collection;
+        window.firestoreGetDocs = getDocs;
+        window.firestoreQuery = query;
+    </script>
+
+    <script>
+        // Interactive 3D Tilt / Moving Mouse Hover Animation for Login Card
+        const loginCard = document.getElementById('loginCard');
+
+        if (loginCard) {
+            loginCard.addEventListener('mousemove', (e) => {
+                const rect = loginCard.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = -((y - centerY) / centerY) * 8;
+                const rotateY = ((x - centerX) / centerX) * 8;
+
+                loginCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+            });
+
+            loginCard.addEventListener('mouseleave', () => {
+                loginCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+            });
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('identifier').value.trim();
+            const password = document.getElementById('password').value;
+            const identifierError = document.getElementById('identifierError');
+            const passwordError = document.getElementById('passwordError');
+            const signInBtn = document.getElementById('signInBtn');
+
+            let isValid = true;
+
+            // Check if input is valid email or 10-digit mobile number
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const mobileRegex = /^[0-9]{10}$/;
+
+            const isEmail = emailRegex.test(identifier);
+            const isMobile = mobileRegex.test(identifier);
+
+            if (!isEmail && !isMobile) {
+                identifierError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                identifierError.classList.add('hidden');
+            }
+
+            // Password validation
+            if (!password || password.length < 6) {
+                passwordError.classList.remove('hidden');
+                isValid = false;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            if (!isValid) return;
+
+            signInBtn.disabled = true;
+            signInBtn.textContent = "Verifying...";
+
+            try {
+                let resolvedEmail = identifier;
+
+                // If user entered a mobile number, lookup corresponding email in Firestore database
+                if (isMobile) {
+                    if (window.firebaseDb && window.firestoreCollection && window.firestoreGetDocs) {
+                        const appId = typeof __app_id !== 'undefined' ? __app_id : 'harishchandrapur-block';
+                        const usersCol = window.firestoreCollection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'user_profiles');
+                        const querySnapshot = await window.firestoreGetDocs(usersCol);
+                        
+                        let foundEmail = null;
+                        querySnapshot.forEach((docSnap) => {
+                            const data = docSnap.data();
+                            if (data.mobile === identifier && data.email) {
+                                foundEmail = data.email;
+                            }
+                        });
+
+                        if (foundEmail) {
+                            resolvedEmail = foundEmail;
+                        } else {
+                            throw new Error("No account registered with this mobile number in database.");
+                        }
+                    } else {
+                        throw new Error("Database connection unavailable for mobile lookup.");
+                    }
+                }
+
+                let userUid = "anonymous";
+                if (window.firebaseAuth && window.signInWithEmailAndPassword) {
+                    const userCredential = await window.signInWithEmailAndPassword(window.firebaseAuth, resolvedEmail, password);
+                    userUid = userCredential.user ? userCredential.user.uid : "unknown";
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+
+                // Save login details & activity to Firestore
+                if (window.firebaseDb && window.firestoreAddDoc && window.firestoreCollection) {
+                    const appId = typeof __app_id !== 'undefined' ? __app_id : 'harishchandrapur-block';
+                    const logsCol = window.firestoreCollection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'login_attempts');
+                    await window.firestoreAddDoc(logsCol, {
+                        identifier: identifier,
+                        resolvedEmail: resolvedEmail,
+                        uid: userUid,
+                        status: "success",
+                        timestamp: new Date().toISOString()
+                    });
+                }
+
+                showModal("Success", "You have successfully signed in.", true);
+            } catch (error) {
+                console.error("Firebase Auth Error:", error);
+
+                // Log failed login attempt to Firestore as well
+                try {
+                    if (window.firebaseDb && window.firestoreAddDoc && window.firestoreCollection) {
+                        const appId = typeof __app_id !== 'undefined' ? __app_id : 'harishchandrapur-block';
+                        const logsCol = window.firestoreCollection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'login_attempts');
+                        await window.firestoreAddDoc(logsCol, {
+                            identifier: identifier,
+                            status: "failed",
+                            error: error.message || "Invalid credentials",
+                            timestamp: new Date().toISOString()
+                        });
+                    }
+                } catch (logErr) {
+                    console.error("Error saving failure log:", logErr);
+                }
+
+                showModal("Sign In Failed", error.message || "Invalid credentials or mobile number not registered.", false);
+            } finally {
+                signInBtn.disabled = false;
+                signInBtn.textContent = "Sign In";
+            }
+        }
+
+        function openResetModal(e) {
+            e.preventDefault();
+            document.getElementById('resetEmail').value = document.getElementById('identifier').value || '';
+            document.getElementById('resetEmailError').classList.add('hidden');
+            const modal = document.getElementById('resetPasswordModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById('resetPasswordModal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        async function handleResetPassword(e) {
+            e.preventDefault();
+            const resetEmail = document.getElementById('resetEmail').value.trim();
+            const resetEmailError = document.getElementById('resetEmailError');
+            const sendResetBtn = document.getElementById('sendResetBtn');
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(resetEmail)) {
+                resetEmailError.classList.remove('hidden');
+                return;
+            } else {
+                resetEmailError.classList.add('hidden');
+            }
+
+            sendResetBtn.disabled = true;
+            sendResetBtn.textContent = "Sending Link...";
+
+            try {
+                if (window.firebaseAuth && window.sendPasswordResetEmail) {
+                    await window.sendPasswordResetEmail(window.firebaseAuth, resetEmail);
+                } else {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
+
+                // Save password reset request record to Firestore
+                if (window.firebaseDb && window.firestoreAddDoc && window.firestoreCollection) {
+                    const appId = typeof __app_id !== 'undefined' ? __app_id : 'harishchandrapur-block';
+                    const resetCol = window.firestoreCollection(window.firebaseDb, 'artifacts', appId, 'public', 'data', 'password_resets');
+                    await window.firestoreAddDoc(resetCol, {
+                        email: resetEmail,
+                        status: "sent",
+                        timestamp: new Date().toISOString()
+                    });
+                }
+
+                closeResetModal();
+                showModal("Reset Link Sent", "Password reset instructions have been successfully sent to " + resetEmail, true);
+            } catch (error) {
+                console.error("Password reset error:", error);
+                showModal("Reset Failed", error.message || "Could not verify email in database. Please check the address.", false);
+            } finally {
+                sendResetBtn.disabled = false;
+                sendResetBtn.textContent = "Send Reset Link";
+            }
+        }
+
+        function showModal(title, desc, isSuccess) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDesc').textContent = desc;
+            const icon = document.getElementById('modalIcon');
+            if (isSuccess) {
+                icon.className = "w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center mx-auto text-xl font-bold";
+                icon.textContent = "✓";
+            } else {
+                icon.className = "w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-xl font-bold";
+                icon.textContent = "✕";
+            }
+            document.getElementById('messageModal').classList.remove('hidden');
+            document.getElementById('messageModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('messageModal').classList.remove('flex');
+            document.getElementById('messageModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

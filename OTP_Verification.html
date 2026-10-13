@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login via OTP - Harishchandrapur-I Dev. Block</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- General Reset & Body Styling --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(90deg, #FFFFFF 0%, #FFE6CC 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- Main Login Container --- */
+        .login-container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .emblem {
+            width: 50px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            color: #d65108;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .step-indicator {
+            font-size: 13px;
+            color: #158348;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* --- Input Fields Styling --- */
+        .input-group {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .icon-box {
+            background-color: #d65108;
+            color: #ffffff;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 50px;
+        }
+
+        .input-group input {
+            border: none;
+            padding: 14px 15px;
+            width: 100%;
+            font-size: 14px;
+            outline: none;
+            color: #495057;
+        }
+
+        .input-group input:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+
+        /* --- Captcha Box Styling --- */
+        .captcha-box {
+            background-color: #f7f4fc;
+            border: 1px solid #e0d8f0;
+            border-radius: 4px;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .captcha-text {
+            color: #5c41cc;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .captcha-box .fa-sync-alt {
+            position: absolute;
+            right: 15px;
+            color: #158348;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        /* --- Buttons Styling --- */
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        .btn-primary { background-color: #0d6efd; }
+        .btn-primary:hover { background-color: #0b5ed7; }
+        
+        .btn-success { background-color: #158348; }
+        .btn-success:hover { background-color: #106b3a; }
+
+        /* --- Utility Classes --- */
+        .footer-link {
+            font-size: 14px;
+            color: #212529;
+        }
+
+        .footer-link a {
+            color: #d65108;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .error-msg {
+            color: red;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success-msg {
+            color: #158348;
+            font-size: 13px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <!-- Logo and Title -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="State Emblem of India" class="emblem">
+        <h1>Harishchandrapur-I Dev. Block</h1>
+        <p class="subtitle">(Login via OTP)</p>
+
+        <p id="systemMessage" class="error-msg"></p>
+        <p id="stepIndicator" class="step-indicator">Step 1: Verify Identity</p>
+
+        <!-- STEP 1: MOBILE & CAPTCHA -->
+        <div id="step1-container">
+            <div class="input-group">
+                <div class="icon-box"><i class="fas fa-mobile-alt"></i></div>
+                <input type="tel" id="loginMobile" pattern="[0-9]{10}" placeholder="Enter Registered Mobile Number" required>
+            </div>
+
+            <div class="captcha-box">
+                <span id="captchaQuestion" class="captcha-text">Solve: ...</span>
+                <i id="refreshCaptcha" class="fas fa-sync-alt" title="Refresh Captcha"></i>
+            </div>
+
+            <div class="input-group">
+                <div class="icon-box"><i class="fas fa-check"></i></div>
+                <input type="text" id="loginCaptcha" placeholder="Enter Captcha">
+            </div>
+
+            <div class="btn-container">
+                <button id="btnSendOtp" class="btn btn-primary">Send OTP</button>
+            </div>
+        </div>
+
+        <!-- STEP 2: OTP ENTRY (Hidden Initially) -->
+        <div id="step2-container" class="hidden">
+            <div class="input-group">
+                <div class="icon-box"><i class="fas fa-comment-sms"></i></div>
+                <input type="text" id="otpInput" placeholder="Enter 6-Digit OTP" maxlength="6">
+            </div>
+            <div class="btn-container">
+                <button id="btnVerifyLogin" class="btn btn-success">Verify & Login</button>
+            </div>
+        </div>
+
+        <!-- Footer Link -->
+        <p class="footer-link">Not Registered? <a href="register.html">Register Here</a></p>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // State Variables
+            let currentCaptchaAnswer = 0;
+            let generatedOTP = "";
+            let verifiedMobileNumber = "";
+
+            // UI Elements
+            const msgBox = document.getElementById('systemMessage');
+            const stepIndicator = document.getElementById('stepIndicator');
+            const step1 = document.getElementById('step1-container');
+            const step2 = document.getElementById('step2-container');
+            
+            // --- CAPTCHA GENERATOR ---
+            function generateCaptcha() {
+                const num1 = Math.floor(Math.random() * 50) + 1;
+                const num2 = Math.floor(Math.random() * 15) + 1;
+                currentCaptchaAnswer = num1 + num2;
+                
+                document.getElementById('captchaQuestion').innerText = `Solve: ${num1} + ${num2} = ?`;
+                document.getElementById('loginCaptcha').value = ''; 
+            }
+
+            // Initialize captcha on load & attach refresh event
+            generateCaptcha();
+            document.getElementById('refreshCaptcha').addEventListener('click', generateCaptcha);
+
+            // Helper to show messages
+            function showMessage(msg, isError = true) {
+                msgBox.innerText = msg;
+                msgBox.style.display = "block";
+                msgBox.className = isError ? "error-msg" : "success-msg";
+            }
+
+            // --- STEP 1: VALIDATE & SEND OTP ---
+            document.getElementById('btnSendOtp').addEventListener('click', () => {
+                const mobile = document.getElementById('loginMobile').value.trim();
+                const captchaInput = document.getElementById('loginCaptcha').value.trim();
+
+                // 1. Basic Validation
+                if (!mobile || !captchaInput) {
+                    showMessage("Please enter your Mobile Number and Captcha.");
+                    return;
+                }
+
+                if (mobile.length !== 10 || isNaN(mobile)) {
+                    showMessage("Please enter a valid 10-digit mobile number.");
+                    return;
+                }
+
+                // 2. Validate Captcha
+                if (parseInt(captchaInput) !== currentCaptchaAnswer) {
+                    showMessage("Incorrect Captcha Answer! Please try again.");
+                    generateCaptcha();
+                    return;
+                }
+
+                // 3. Check if user is registered in localStorage
+                const storedUser = localStorage.getItem(mobile);
+                if (!storedUser) {
+                    showMessage("This mobile number is not registered. Please register first.");
+                    return;
+                }
+
+                // 4. Generate OTP and move to Step 2
+                generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+                verifiedMobileNumber = mobile; 
+
+                // Simulate sending OTP via alert (replaced with custom message box fallback if needed, keeping exact file logic)
+                alert(`SIMULATION: Your Login OTP for Harishchandrapur-I Dev. Block is ${generatedOTP}`);
+
+                // Update UI to Step 2
+                msgBox.style.display = "none"; // Clear errors
+                step1.classList.add('hidden');
+                step2.classList.remove('hidden');
+                stepIndicator.innerText = "Step 2: Enter OTP to Login";
+                showMessage("OTP sent successfully to your mobile!", false);
+            });
+
+            // --- STEP 2: VERIFY OTP AND LOGIN ---
+            document.getElementById('btnVerifyLogin').addEventListener('click', () => {
+                const userOTP = document.getElementById('otpInput').value.trim();
+
+                if (!userOTP) {
+                    showMessage("Please enter the OTP.");
+                    return;
+                }
+
+                if (userOTP === generatedOTP) {
+                    // Fetch user name for welcome message
+                    const userData = JSON.parse(localStorage.getItem(verifiedMobileNumber));
+                    
+                    alert(`Login Successful! Welcome back, ${userData.name || "User"}.`);
+                    
+                    // Redirect to dashboard (Simulated)
+                    // window.location.href = "dashboard.html"; 
+                } else {
+                    showMessage("Incorrect OTP. Please try again.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
