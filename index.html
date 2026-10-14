@@ -16,16 +16,15 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
+        /* Top Utility Bar */
         .top-bar {
             background-color: #d35400; 
             color: #ecf0f1;
             font-size: 0.85rem;
             padding: 5px 0;
         }
+        /* Header Banner Styling */
         .main-header {
             background-color:#f4f6f9; 
             border-bottom: 4px solid #b35900; 
@@ -35,37 +34,50 @@
             height: 70px;
         }
         .header-titles h2 {
-            color: #212529; 
+            color: #2c3e50; 
             font-weight: 700;
             font-size: 1.75rem;
             margin-bottom: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
         .header-titles h5 {
-            color: #495057; 
+            color: black; 
             font-size: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
         .header-titles p {
-            color: #6c757d !important; 
+            color: Black !important; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
         }
+        
+        /* Navigation Bar */
         .navbar-custom {
             background-color: var(--wb-header-dark) !important;
             padding: 5px 0;
         }
+        
+        /* Spacing between menu items */
         .navbar-custom .nav-item {
             margin: 0 4px;
         }
+        
+        /* Base styling for Nav Links */
         .navbar-custom .nav-link {
             color: #ffffff !important;
             font-weight: 500;
             padding: 8px 16px !important;
-            border-radius: 25px;
-            transition: all 0.3s ease;
+            border-radius: 25px; /* Creates the rounded corners for the button */
+            transition: all 0.3s ease; /* Smooth animation for hover */
         }
+        
+        /* Button-type Hover Style */
         .navbar-custom .nav-link:hover, .navbar-custom .nav-link.active {
-            background-color: #d35400;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            transform: translateY(-2px);
+            background-color: #d35400; /* Dark orange background */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Adds button depth */
+            transform: translateY(-2px); /* Slight lift effect */
         }
+
+        /* Dropdown specific hover styling */
         .navbar-custom .dropdown-menu {
             border: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -81,6 +93,8 @@
             background-color: #fff3e0;
             color: #d35400 !important;
         }
+
+        /* Marquee ticker */
         .ticker-wrap {
             background-color: #fff3e0; 
             border-bottom: 1px solid #ffd180;
@@ -96,17 +110,21 @@
             text-transform: uppercase;
             border-radius: 4px;
         }
+        
+        /* --- Orange Gradient for the Main Container --- */
         #main-content {
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(230, 126, 34, 0.15);
-            flex: 1;
         }
+
+        /* Section Panels */
         .card-header-custom {
             background-color: var(--wb-header-dark);
             color: white;
             font-weight: 600;
         }
+        /* Citizen Service Portal Card Elements */
         .service-card {
             border: none;
             transition: all 0.2s ease-in-out;
@@ -121,6 +139,8 @@
             font-size: 2.2rem;
             color: var(--wb-header-dark);
         }
+
+        /* Notice Board Section Custom Styling */
         .notice-section-wrapper {
             background-color: #fff;
             border-radius: 12px;
@@ -141,11 +161,15 @@
             font-weight: 700;
             font-size: 2rem;
         }
+        .notice-board-header p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
         .notice-card {
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             overflow: hidden;
-            min-height: 350px; 
+            height: 350px; 
             display: flex;
             flex-direction: column;
         }
@@ -179,6 +203,7 @@
             font-size: 0.85rem;
             color: #6c757d;
             margin-bottom: 8px;
+            text-transform: uppercase;
         }
         .notice-item a {
             font-size: 0.85rem;
@@ -186,6 +211,11 @@
             text-decoration: none;
             color: #d35400; 
         }
+        .notice-item a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Custom Orange Button for Notices */
         .btn-notice-orange {
             background-color: #d35400;
             color: white;
@@ -196,40 +226,22 @@
             background-color: #b34700;
             color: white;
         }
+        
+        /* --- Footer Background Dark Orange --- */
         footer {
-            background-color: #cd5a07; 
+            background-color: #d35400; 
             color: white; 
             font-size: 0.9rem;
-            margin-top: auto;
-        }
-        /* Custom modal replacement for alert() */
-        .custom-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        .custom-modal-content {
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
     </style>
 </head>
-<body onload="initApp()">
+<body onload="updateDateTime()">
 
-    <!-- Top Utility Bar -->
+    <!-- Top Utility Bar with Live Indian Date & Time -->
     <div class="top-bar">
         <div class="container d-flex justify-content-between align-items-center">
             <div>
-                <i class="fa fa-phone me-1"></i> Helpline: 03512-258221 | <i class="fa fa-envelope me-1"></i> bdo.hcp1@gmail.com
+                <i class="fa fa-phone me-1"></i> Helpline: 03512-xxxxx | <i class="fa fa-envelope me-1"></i> Harishchandrapur1@gmail.com
             </div>
             <div>
                 <span id="live-datetime" class="me-3 text-white fw-semibold"><i class="fa fa-clock me-1"></i> Loading IST...</span>
@@ -238,12 +250,13 @@
         </div>
     </div>
 
-    <!-- Main Header -->
+    <!-- Main Government Header (Government of India Emblem Only) -->
     <div class="main-header">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-2 text-center text-md-start">
-                    <img src="https://placehold.co/100x70/e67e22/ffffff?text=Emblem" alt="National Emblem of India" class="emblem-img rounded">
+                    <!-- National Emblem of India (Govt of India Logo) -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="National Emblem of India" class="emblem-img" onerror="this.onerror=null; this.src='https://placehold.co/100x70/e67e22/ffffff?text=GoI+Logo';">
                 </div>
                 <div class="col-md-10 text-center text-md-start header-titles">
                     <h5>পশ্চিমবঙ্গ সরকার | Government of West Bengal</h5>
@@ -262,41 +275,49 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#" onclick="switchTab('home')"><i class="fa fa-home"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fa fa-home"></i> Home</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Our Block</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('bdoDirectory')"><i class="fa fa-id-badge me-2" style="color: var(--wb-header-dark);"></i>BDO's Directory</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('blockProfile')"><i class="fa fa-info-circle me-2" style="color: var(--wb-header-dark);"></i>Profile</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('locationMap')"><i class="fa fa-map-marked-alt me-2" style="color: var(--wb-header-dark);"></i>Location with GPS Map</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('gpList')"><i class="fa fa-landmark me-2" style="color: var(--wb-header-dark);"></i>Gram Panchayat</a></li>
+                            <li><a class="dropdown-item" href="BDOs_Directory.html"><i class="fa fa-id-badge me-2" style="color: var(--wb-header-dark);"></i>BDO's Directory</a></li>
+                            <li><a class="dropdown-item" href="block_profile.html"><i class="fa fa-info-circle me-2" style="color: var(--wb-header-dark);"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="location.html"><i class="fa fa-map-marked-alt me-2" style="color: var(--wb-header-dark);"></i>Location with GPS Map</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-landmark me-2" style="color: var(--wb-header-dark);"></i>Gram Panchayat</a></li>
                         </ul>
                     </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Who's Who</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('blockOfficials')"><i class="fa fa-user-tie me-2" style="color: var(--wb-header-dark);"></i>Block Official</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('departments')"><i class="fa fa-network-wired me-2" style="color: var(--wb-header-dark);"></i>Line Department</a></li>
+                            <li><a class="dropdown-item" href="Block_Official.html"><i class="fa fa-user-tie me-2" style="color: var(--wb-header-dark);"></i>Block Official</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fa fa-network-wired me-2" style="color: var(--wb-header-dark);"></i>Line Department</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="switchTab('tenders')">Tenders / NIT</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="switchTab('notices')">Notice Board</a></li>
+                    
+                    <li class="nav-item"><a class="nav-link" href="#">Tenders / NIT</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Notice Board</a></li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Citizen Services</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('schemes')"><i class="fa fa-hand-holding-hand me-2" style="color: var(--wb-header-dark);"></i>Schemes</a></li>
+                            <li><a class="dropdown-item" href="Voter_Services.html"><i class="fa fa-hand-holding-hand me-2" style="color: var(--wb-header-dark);"></i>Voter Services</a></li>
+                            <li><a class="dropdown-item" href="schemes.html"><i class="fa fa-hand-holding-hand me-2" style="color: var(--wb-header-dark);"></i>Schemes</a></li>
                         </ul>
                     </li>
+                    
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Utilities</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('adminPanel')"><i class="fa fa-cogs me-2" style="color: var(--wb-header-dark);"></i>Firebase Admin Portal</a></li>
-                            <li><a class="dropdown-item" href="#" onclick="switchTab('pension')"><i class="fa fa-file-invoice-dollar me-2" style="color: var(--wb-header-dark);"></i>Pension Update system</a></li>
-                        </ul>
+                            <li><a class="dropdown-item" href="login.html"><i class="fa fa-cogs me-2" style="color: var(--wb-header-dark);"></i>Admin</a></li>
+                            <li><a class="dropdown-item" href="Line_department_login.html"><i class="fa fa-file-invoice-dollar me-2" style="color: var(--wb-header-dark);"></i>Line Department Login</a></li>
+                            <li><a class="dropdown-item" href="https://ecinet.eci.gov.in/login" target="_blank"><i class="fa fa-id-card-alt me-2" style="color: var(--wb-header-dark);"></i>BLO Login</a></li>
+                       </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="switchTab('gallery')">Gallery</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="switchTab('about')">About Us</a></li>
+                    
+                    <li class="nav-item"><a class="nav-link" href="#">Gallery</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
                 </ul>
+                
             </div>
         </div>
     </nav>
@@ -305,193 +326,289 @@
     <div class="ticker-wrap">
         <div class="container d-flex align-items-center">
             <span class="ticker-title me-3">Notices</span>
-            <marquee id="marquee-ticker" behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
-                <span class="text-dark me-5">Loading announcements from Firebase...</span>
+            <marquee behavior="scroll" direction="left" onmouseover="this.stop();" onmouseout="this.start();">
+                <a href="#" class="text-dark text-decoration-none me-5">Notice Inviting e-Tender No. 04/HCP-I/2026-27 for A.B.C Road construction under Harishchandrapur-I Panchayat Samiti. <strong>[Last Date: 20/08/2026]</strong></a>
+                <a href="#" class="text-dark text-decoration-none me-5">Special Camp schedule for Jan Kalyan Shivir / Ayushman Bharat registration updates across all 7 Gram Panchayats.</a>
             </marquee>
         </div>
     </div>
 
     <!-- Main Content Layout -->
     <div class="container my-4" id="main-content" tabindex="-1">
-        <!-- Dynamic views get loaded here -->
-        <div id="view-container">
-            <!-- Default Home View -->
-            <div class="row">
-                <!-- Left Column: BDO Desk & Quick Menu -->
-                <div class="col-lg-3 mb-4">
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom">
-                            <i class="fa fa-user-tie me-2"></i> From the BDO's Desk
-                        </div>
-                        <div class="card-body">
-                            <h6 class="fw-bold mb-1 text-center" id="bdo-name-disp">Block Development Officer</h6>
-                            <p class="text-muted small mb-2 text-center">Harishchandrapur-I Dev. Block</p>
-                            <hr class="my-2">
-                            <p class="small text-start text-secondary" id="bdo-message-disp">"Welcome to the official web portal powered by Firebase cloud data. Our mission is transparent governance and prompt public service delivery."</p>
-                        </div>
+        <div class="row">
+            
+            <!-- Left Column: BDO Desk & Quick Menu -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header card-header-custom">
+                        <i class="fa fa-user-tie me-2"></i> From the BDO's Desk
                     </div>
-
-                    <!-- Important Portals List -->
-                    <div class="card shadow-sm">
-                        <div class="card-header card-header-custom">
-                            <i class="fa fa-link me-2"></i> Important Links
-                        </div>
-                        <ul class="list-group list-group-flush small">
-                            <li class="list-group-item"><a href="https://wbprd.gov.in" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>WB P&RD Department</a></li>
-                            <li class="list-group-item"><a href="https://malda.gov.in" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>Malda District Portal</a></li>
-                            <li class="list-group-item"><a href="https://beneficiary.nha.gov.in/" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>Ayushman Bharat Portal</a></li>
-                            <li class="list-group-item"><a href="https://banglarbhumi.gov.in" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>Banglarbhumi Land Records</a></li>
-                        </ul>
+                    <div class="card-body">
+                        <h6 class="fw-bold mb-1 text-center">Block Development Officer</h6>
+                        <p class="text-muted small mb-2 text-center">Harishchandrapur-I Dev. Block</p>
+                        <hr class="my-2">
+                        <p class="small text-start text-secondary">"Welcome to the official web portal. Our mission is transparent governance, prompt public service delivery, and sustainable rural development."</p>
                     </div>
                 </div>
 
-                <!-- Center & Expanded Right Area: Main Page Content -->
-                <div class="col-lg-9 mb-4">
-                    <!-- LATEST NOTICES & ANNOUNCEMENTS SECTION -->
-                    <div class="notice-section-wrapper mt-0 mb-4">
-                        <div class="notice-section-title">Latest Notices & Announcements</div>
-                        
-                        <div class="text-center notice-board-header mb-4">
-                            <h3><i class="fa-solid fa-bullhorn me-2" style="color: #d35400;"></i> Notice Board</h3>
-                            <p>Office of the Block Development Officer, Harishchandrapur-I Development Block</p>
-                        </div>
-
-                        <div class="row g-4" id="home-notices-container">
-                            <!-- Dynamic Notices Rendered Here -->
-                            <div class="col-md-12 text-center py-4">
-                                <div class="spinner-border text-warning" role="status"></div>
-                                <p class="text-muted small mt-2">Loading notices from Firebase...</p>
-                            </div>
-                        </div>
+                <!-- Important Portals List -->
+                <div class="card shadow-sm">
+                    <div class="card-header card-header-custom">
+                        <i class="fa fa-link me-2"></i> Important Links
                     </div>
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item"><a href="https://wbprd.gov.in" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>WB P&RD Department</a></li>
+                        <li class="list-group-item"><a href="https://malda.gov.in" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>Malda District Portal</a></li>
+                        <li class="list-group-item"><a href="#" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>Ayushman Bharat Portal</a></li>
+                        <li class="list-group-item"><a href="#" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>Banglarbhumi Land Records</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Center & Expanded Right Area: Main Page Content -->
+            <div class="col-lg-9 mb-4">
+
+                <!-- LATEST NOTICES & ANNOUNCEMENTS SECTION -->
+                <div class="notice-section-wrapper mt-0 mb-4">
+                    <div class="notice-section-title">Latest Notices & Announcements</div>
                     
-                    <!-- CITIZEN SERVICES SECTION -->
-                    <div id="citizen-services-section">
-                        <div class="card shadow-sm mb-3 bg-white border-0 border-start border-4" style="border-color: var(--wb-header-dark) !important;">
-                            <div class="card-body py-3">
-                                <h3 class="fw-bold mb-1" style="color: var(--wb-header-dark);"><i class="fa fa-id-card me-2"></i> Citizen Services & Information Portal</h3>
-                                <p class="text-muted small mb-0">Access government welfare services, download tracking applications, check certificate requirements, and view public information for Harishchandrapur-I Block.</p>
+                    <div class="text-center notice-board-header mb-4">
+                        <h3><i class="fa-solid fa-bullhorn me-2" style="color: #d35400;"></i> Notice Board</h3>
+                        <p>Office of the Block Development Officer, Harishchandrapur-I Development Block</p>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <button class="btn btn-notice-orange btn-sm px-3 fw-semibold"><i class="fa-regular fa-file-lines me-1"></i> View All NITs</button>
+                        <button class="btn btn-notice-orange btn-sm px-3 fw-semibold"><i class="fa-solid fa-bullhorn me-1"></i> <a href="#" class="text-white text-decoration-none">View All Notices</a></button>
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- Latest NIT -->
+                        <div class="col-md-6">
+                            <div class="notice-card">
+                                <div class="notice-card-header-orange">
+                                    <i class="fa-solid fa-file-contract me-2"></i> Latest NIT
+                                </div>
+                                <div class="notice-card-body" id="nit-container">
+                                    <div class="text-center text-muted small pt-4">Loading NITs from database...</div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Quick Services Grid -->
-                        <div class="row g-3 mb-4" id="home-services-container">
-                            <div class="col-md-4">
-                                <div class="card service-card h-100 shadow-sm p-3 text-center">
-                                    <div class="card-body">
-                                        <div class="service-icon mb-3"><i class="fa fa-hands-holding-child"></i></div>
-                                        <h5 class="fw-bold text-dark">Jan Kalyan Shivir</h5>
-                                        <p class="small text-muted">Find camp locations, schedules, and application status tracking.</p>
-                                        <a href="https://jks.wb.gov.in" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">View Schedule</a>
-                                    </div>
+                        <!-- Latest Notices -->
+                        <div class="col-md-6">
+                            <div class="notice-card">
+                                <div class="notice-card-header-orange">
+                                    <i class="fa-solid fa-bell me-2"></i> Latest Notices
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card service-card h-100 shadow-sm p-3 text-center">
-                                    <div class="card-body">
-                                        <div class="service-icon mb-3"><i class="fa fa-notes-medical"></i></div>
-                                        <h5 class="fw-bold text-dark">Ayushman Bharat</h5>
-                                        <p class="small text-muted">Check family enrollment status and digital health card generation.</p>
-                                        <a href="https://beneficiary.nha.gov.in/" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">Check Status</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card service-card h-100 shadow-sm p-3 text-center">
-                                    <div class="card-body">
-                                        <div class="service-icon mb-3"><i class="fa fa-house-chimney-user"></i></div>
-                                        <h5 class="fw-bold text-dark">Awas Yojana</h5>
-                                        <p class="small text-muted">Verify beneficiary lists and housing installment updates.</p>
-                                        <a href="https://awaassoft.pmayg.dord.gov.in" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">Beneficiary Details</a>
-                                    </div>
+                                <div class="notice-card-body" id="notices-container">
+                                    <div class="text-center text-muted small pt-4">Loading notices from database...</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- End Notice Section -->
+                
+                <!-- CITIZEN SERVICES SECTION -->
+                <div id="citizen-services-section">
+                    <!-- Section Title Banner -->
+                    <div class="card shadow-sm mb-3 bg-white border-0 border-start border-4" style="border-color: var(--wb-header-dark) !important;">
+                        <div class="card-body py-3">
+                            <h3 class="fw-bold mb-1" style="color: var(--wb-header-dark);"><i class="fa fa-id-card me-2"></i> Citizen Services & Information Portal</h3>
+                            <p class="text-muted small mb-0">Access government welfare services, download tracking applications, check certificate requirements, and view public information for Harishchandrapur-I Block.</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Services Grid -->
+                    <div class="row g-3 mb-4">
+                        <!-- Service 1 -->
+                        <div class="col-md-4">
+                            <div class="card service-card h-100 shadow-sm p-3 text-center">
+                                <div class="card-body">
+                                    <div class="service-icon mb-3"><i class="fa fa-hands-holding-child"></i></div>
+                                    <h5 class="fw-bold text-dark">Jan Kalyan Shivir</h5>
+                                    <p class="small text-muted">Find camp locations, schedules, and application status tracking for public welfare outreach programs.</p>
+                                    <a href="https://jks.wb.gov.in/Public/KnowYourCampLocation.aspx" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">View Schedule</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Service 2 -->
+                        <div class="col-md-4">
+                            <div class="card service-card h-100 shadow-sm p-3 text-center">
+                                <div class="card-body">
+                                    <div class="service-icon mb-3"><i class="fa fa-notes-medical"></i></div>
+                                    <h5 class="fw-bold text-dark">Ayushman Bharat</h5>
+                                    <p class="small text-muted">Check family enrollment status, hospital networks, and digital health card generation assistance.</p>
+                                    <a href="https://beneficiary.nha.gov.in/" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">Check Status</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Service 3 -->
+                        <div class="col-md-4">
+                            <div class="card service-card h-100 shadow-sm p-3 text-center">
+                                <div class="card-body">
+                                    <div class="service-icon mb-3"><i class="fa fa-house-chimney-user"></i></div>
+                                    <h5 class="fw-bold text-dark">Awas Yojana</h5>
+                                    <p class="small text-muted">Verify beneficiary lists, survey feedback records, and housing installment updates.</p>
+                                    <a href="https://awaassoft.pmayg.dord.gov.in/netiay/AwaasPlus/AwaasPlus_Beneficiary_Details.aspx" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">Beneficiary Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Citizen Services Section -->
+
             </div>
         </div>
     </div>
 
-    <!-- Custom Modal for Notifications -->
-    <div class="custom-modal" id="appModal">
-        <div class="custom-modal-content">
-            <h5 id="modalTitle" class="fw-bold mb-3 text-dark">Notification</h5>
-            <p id="modalMessage" class="text-secondary small mb-4">Message goes here...</p>
-            <button class="btn btn-sm btn-notice-orange px-4 rounded-pill" onclick="closeModal()">OK</button>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-        <div style="text-align: center; padding: 20px; font-size: 14px; line-height: 1.8;">
+    <!-- Custom Footer Implementation -->
+    <footer style="background-color: #cd5a07; color: #ffffff; width: 100%; margin-top: auto; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <!-- Bottom Info Area -->
+        <div style="text-align: center; padding: 20px 20px 25px 20px; font-size: 14px; line-height: 1.8;">
             <div>
                 <span style="font-weight: 700;">Harishchandrapur-I Development Block</span> | Government of West Bengal
             </div>
             <div>
-                &copy; 2026 All Rights Reserved. Data synchronized securely with Firebase cloud storage.
+                &copy; 2026 All Rights Reserved.
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Modal for Adding Notice -->
+    <div class="modal fade" id="addNoticeModal" tabindex="-1" aria-labelledby="addNoticeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-warning text-dark">
+            <h5 class="modal-title" id="addNoticeModalLabel"><i class="fa fa-plus-circle me-1"></i> Add New Notice or NIT</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="noticeForm">
+              <div class="mb-3">
+                <label for="noticeType" class="form-label">Category</label>
+                <select class="form-select" id="noticeType" required>
+                  <option value="notice">Notice</option>
+                  <option value="nit">NIT (Notice Inviting Tender)</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="noticeTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="noticeTitle" required placeholder="e.g. Census 2027 Self Enumeration">
+              </div>
+              <div class="mb-3">
+                <label for="noticeDesc" class="form-label">Description / Details</label>
+                <textarea class="form-control" id="noticeDesc" rows="3" placeholder="Enter details or schedule..."></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="noticeLink" class="form-label">Document / Download Link URL</label>
+                <input type="text" class="form-control" id="noticeLink" value="#" placeholder="#">
+              </div>
+              <button type="submit" class="btn btn-warning w-100 fw-bold">Publish to Database</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <!-- Firebase SDK Imports -->
+    <!-- Bootstrap JS Bundle CDN & JavaScript for Indian Date/Time & Firebase -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Firebase configuration provided by user
         const firebaseConfig = {
-            apiKey: "AIzaSyBsv8pXm3nuLDwTWo6R_Yu0AquHGaZ2vqw",
-            authDomain: "hcp1-b92cf.firebaseapp.com",
-            databaseURL: "https://hcp1-b92cf-default-rtdb.firebaseio.com",
-            projectId: "hcp1-b92cf",
-            storageBucket: "hcp1-b92cf.firebasestorage.app",
-            messagingSenderId: "734442156416",
-            appId: "1:734442156416:web:ecb056f3bd1b52039a5165",
-            measurementId: "G-PKYD293JCJ"
+            apiKey: "AIzaSyDmAtlwwM0edu0ffnVJBYqhE9II9buG-Fg",
+            authDomain: "skytech-f813b.firebaseapp.com",
+            databaseURL: "https://skytech-f813b-default-rtdb.firebaseio.com",
+            projectId: "skytech-f813b",
+            storageBucket: "skytech-f813b.firebasestorage.app",
+            messagingSenderId: "300030506328",
+            appId: "1:300030506328:web:d3494afa60759d4dc7612d",
+            measurementId: "G-K3DVHBBDMM"
         };
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'harishchandrapur-block-app';
-        
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        let currentUser = null;
-        let globalNotices = [];
-        let globalSchemes = [];
-        let globalOfficials = [];
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
-        window.initApp = async function() {
-            updateDateTime();
-            
-            // Authentication Handling robust against restricted sign-in methods
+        async function initFirebase() {
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                currentUser = auth.currentUser;
-            } catch (err) {
-                console.warn("Anonymous/Custom auth restricted or failed, proceeding with default auth state:", err.message);
-                // Listen to auth state changes directly without forcing anonymous sign-in if disabled in Firebase console
-                onAuthStateChanged(auth, (user) => {
-                    currentUser = user;
+                // Do not attempt custom token sign-in with mismatched or empty sandbox tokens to prevent auth/custom-token-mismatch.
+                // We will proceed directly with Firestore listeners which rely on public security rules.
+                
+                // Reference to public collection
+                const noticesRef = collection(db, 'artifacts', appId, 'public', 'data', 'block_notices');
+
+                onSnapshot(noticesRef, (snapshot) => {
+                    const nitContainer = document.getElementById('nit-container');
+                    const noticesContainer = document.getElementById('notices-container');
+
+                    let nitHTML = '';
+                    let noticeHTML = '';
+
+                    let nitCount = 0;
+                    let noticeCount = 0;
+
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        const itemType = data.type || 'notice';
+                        const title = data.title || 'Untitled Notice';
+                        const desc = data.desc || '';
+                        const link = data.link || '#';
+                        const dateStr = data.createdAt ? new Date(data.createdAt).toLocaleDateString('en-IN') : '';
+
+                        if (itemType === 'nit') {
+                            nitCount++;
+                            nitHTML += `
+                                <div class="notice-item">
+                                    <h6>${title}</h6>
+                                    ${desc ? `<p>${desc}</p>` : ''}
+                                    ${dateStr ? `<small class="text-muted d-block mb-1">Date: ${dateStr}</small>` : ''}
+                                    <a href="${link}" target="_blank"><i class="fa fa-download me-1"></i> Download NIT</a>
+                                </div>
+                            `;
+                        } else {
+                            noticeCount++;
+                            noticeHTML += `
+                                <div class="notice-item">
+                                    <h6>${title}</h6>
+                                    ${desc ? `<p>${desc}</p>` : ''}
+                                    ${dateStr ? `<small class="text-muted d-block mb-1">Date: ${dateStr}</small>` : ''}
+                                    <a href="${link}" target="_blank"><i class="fa fa-download me-1"></i> Download</a>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    if (nitCount === 0) {
+                        nitHTML = '<div class="text-center text-muted small pt-4">No NIT notices available at the moment.</div>';
+                    }
+                    if (noticeCount === 0) {
+                        noticeHTML = '<div class="text-center text-muted small pt-4">No general notices available at the moment.</div>';
+                    }
+
+                    nitContainer.innerHTML = nitHTML;
+                    noticesContainer.innerHTML = noticeHTML;
+                }, (error) => {
+                    console.error("Firestore listener error:", error);
                 });
+
+            } catch (e) {
+                console.error("Firebase init error:", e);
+                document.getElementById('nit-container').innerHTML = '<div class="text-center text-danger small pt-4">Error loading from database.</div>';
+                document.getElementById('notices-container').innerHTML = '<div class="text-center text-danger small pt-4">Error loading from database.</div>';
             }
+        }
 
-            // Fetch initial data from Firestore
-            loadFirebaseData();
-        };
-
-        // Live Clock
-        window.updateDateTime = function() {
+        initFirebase();
+    </script>
+    <script>
+        function updateDateTime() {
             const options = {
                 timeZone: 'Asia/Kolkata',
                 weekday: 'short',
@@ -506,601 +623,10 @@
             const formatter = new Intl.DateTimeFormat('en-IN', options);
             function refresh() {
                 const now = new Date();
-                const el = document.getElementById('live-datetime');
-                if (el) el.innerHTML = '<i class="fa fa-clock me-1"></i> ' + formatter.format(now) + ' IST';
+                document.getElementById('live-datetime').innerHTML = '<i class="fa fa-clock me-1"></i> ' + formatter.format(now) + ' IST';
             }
             refresh();
             setInterval(refresh, 1000);
-        };
-
-        // Custom Modal Alert
-        window.showAlert = function(title, message) {
-            document.getElementById('modalTitle').innerText = title;
-            document.getElementById('modalMessage').innerText = message;
-            document.getElementById('appModal').style.display = 'flex';
-        };
-        window.closeModal = function() {
-            document.getElementById('appModal').style.display = 'none';
-        };
-
-        // Fetch data using live listeners
-        function loadFirebaseData() {
-            if (!auth.currentUser) return;
-            
-            // Public data collection path RULE 1
-            const noticesCol = collection(db, 'artifacts', appId, 'public', 'data', 'notices');
-            onSnapshot(noticesCol, (snapshot) => {
-                globalNotices = [];
-                snapshot.forEach((docSnap) => {
-                    globalNotices.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                renderNotices();
-                renderTicker();
-            }, (error) => {
-                console.error("Error loading notices:", error);
-            });
-
-            const schemesCol = collection(db, 'artifacts', appId, 'public', 'data', 'schemes');
-            onSnapshot(schemesCol, (snapshot) => {
-                globalSchemes = [];
-                snapshot.forEach((docSnap) => {
-                    globalSchemes.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                if (currentActiveTab === 'schemes') renderSchemesView();
-            }, (error) => {
-                console.error("Error loading schemes:", error);
-            });
-
-            const officialsCol = collection(db, 'artifacts', appId, 'public', 'data', 'officials');
-            onSnapshot(officialsCol, (snapshot) => {
-                globalOfficials = [];
-                snapshot.forEach((docSnap) => {
-                    globalOfficials.push({ id: docSnap.id, ...docSnap.data() });
-                });
-                if (currentActiveTab === 'blockOfficials' || currentActiveTab === 'bdoDirectory') renderOfficialsView();
-            }, (error) => {
-                console.error("Error loading officials:", error);
-            });
-        }
-
-        // Render Notices on Home Page
-        function renderNotices() {
-            const container = document.getElementById('home-notices-container');
-            if (!container) return;
-
-            if (globalNotices.length === 0) {
-                container.innerHTML = `
-                    <div class="col-md-6">
-                        <div class="notice-card">
-                            <div class="notice-card-header-orange"><i class="fa-solid fa-file-contract me-2"></i> Latest NIT</div>
-                            <div class="notice-card-body d-flex justify-content-center align-items-center pt-4 bg-white">
-                                <span class="text-muted small">No NIT notices posted yet. Use Admin Portal to add.</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="notice-card">
-                            <div class="notice-card-header-orange"><i class="fa-solid fa-bell me-2"></i> Latest Notices</div>
-                            <div class="notice-card-body">
-                                <div class="notice-item">
-                                    <h6>Self Enumeration Work Flow</h6>
-                                    <a href="#" onclick="showAlert('Notice','Census 2027 self enumeration details.')">Download</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            let nitHtml = '';
-            let generalHtml = '';
-
-            globalNotices.forEach(n => {
-                if (n.category === 'NIT') {
-                    nitHtml += `
-                        <div class="notice-item">
-                            <h6>${n.title}</h6>
-                            <p>${n.description || ''}</p>
-                            <span class="badge bg-secondary mb-2">Date: ${n.date || 'N/A'}</span><br>
-                            <a href="${n.link || '#'}" target="_blank">Download / View</a>
-                        </div>
-                    `;
-                } else {
-                    generalHtml += `
-                        <div class="notice-item">
-                            <h6>${n.title}</h6>
-                            <p>${n.description || ''}</p>
-                            <span class="badge bg-secondary mb-2">Date: ${n.date || 'N/A'}</span><br>
-                            <a href="${n.link || '#'}" target="_blank">Download / View</a>
-                        </div>
-                    `;
-                }
-            });
-
-            container.innerHTML = `
-                <div class="col-md-6">
-                    <div class="notice-card">
-                        <div class="notice-card-header-orange"><i class="fa-solid fa-file-contract me-2"></i> Latest NITs</div>
-                        <div class="notice-card-body">
-                            ${nitHtml || '<span class="text-muted small">No NITs currently active.</span>'}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="notice-card">
-                        <div class="notice-card-header-orange"><i class="fa-solid fa-bell me-2"></i> Latest General Notices</div>
-                        <div class="notice-card-body">
-                            ${generalHtml || '<span class="text-muted small">No general notices currently active.</span>'}
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Render Ticker
-        function renderTicker() {
-            const ticker = document.getElementById('marquee-ticker');
-            if (!ticker) return;
-            if (globalNotices.length === 0) {
-                ticker.innerHTML = '<span class="text-dark me-5">Welcome to Harishchandrapur-I Development Block Portal. Check notices for updates.</span>';
-                return;
-            }
-            let html = '';
-            globalNotices.forEach(n => {
-                html += `<a href="#" class="text-dark text-decoration-none me-5" onclick="showAlert('${n.title}','${n.description || ''}')">${n.title} <strong>[Date: ${n.date || ''}]</strong></a>`;
-            });
-            ticker.innerHTML = html;
-        }
-
-        // Tab Navigation Controller
-        let currentActiveTab = 'home';
-        window.switchTab = function(tabName) {
-            currentActiveTab = tabName;
-            const container = document.getElementById('view-container');
-            
-            if (tabName === 'home') {
-                container.innerHTML = `
-                    <div class="row">
-                        <div class="col-lg-3 mb-4">
-                            <div class="card shadow-sm mb-4">
-                                <div class="card-header card-header-custom"><i class="fa fa-user-tie me-2"></i> From the BDO's Desk</div>
-                                <div class="card-body">
-                                    <h6 class="fw-bold mb-1 text-center">Block Development Officer</h6>
-                                    <p class="text-muted small mb-2 text-center">Harishchandrapur-I Dev. Block</p>
-                                    <hr class="my-2">
-                                    <p class="small text-start text-secondary">"Welcome to the official web portal. Our mission is transparent governance, prompt public service delivery, and sustainable rural development."</p>
-                                </div>
-                            </div>
-                            <div class="card shadow-sm">
-                                <div class="card-header card-header-custom"><i class="fa fa-link me-2"></i> Important Links</div>
-                                <ul class="list-group list-group-flush small">
-                                    <li class="list-group-item"><a href="https://wbprd.gov.in" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>WB P&RD Department</a></li>
-                                    <li class="list-group-item"><a href="https://malda.gov.in" target="_blank" class="text-decoration-none text-dark"><i class="fa fa-angle-right me-2" style="color: var(--wb-header-dark);"></i>Malda District Portal</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-lg-9 mb-4">
-                            <div class="notice-section-wrapper mt-0 mb-4">
-                                <div class="notice-section-title">Latest Notices & Announcements</div>
-                                <div class="text-center notice-board-header mb-4">
-                                    <h3><i class="fa-solid fa-bullhorn me-2" style="color: #d35400;"></i> Notice Board</h3>
-                                    <p>Office of the Block Development Officer, Harishchandrapur-I Development Block</p>
-                                </div>
-                                <div class="row g-4" id="home-notices-container"></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                renderNotices();
-            } else if (tabName === 'adminPanel') {
-                container.innerHTML = `
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
-                            <span><i class="fa fa-cogs me-2"></i> Firebase Admin Control Panel</span>
-                            <span class="badge bg-light text-dark">Authenticated via Firebase</span>
-                        </div>
-                        <div class="card-body">
-                            <p class="text-secondary small">Add, update or remove block announcements, notices, schemes, and officials in real time. Changes are instantly synchronized across all visitors.</p>
-                            
-                            <ul class="nav nav-tabs mb-3" id="adminTabs" role="tablist">
-                                <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#adminNoticeTab">Manage Notices</button></li>
-                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#adminSchemeTab">Manage Schemes</button></li>
-                                <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#adminOfficialTab">Manage Officials</button></li>
-                            </ul>
-
-                            <div class="tab-content">
-                                <!-- Notice Tab -->
-                                <div class="tab-pane fade show active" id="adminNoticeTab">
-                                    <h6 class="fw-bold text-dark mb-3">Add New Notice / NIT</h6>
-                                    <form id="noticeForm" onsubmit="handleAddNotice(event)">
-                                        <div class="row g-3">
-                                            <div class="col-md-4">
-                                                <label class="form-label small fw-bold">Title</label>
-                                                <input type="text" class="form-control form-control-sm" id="noticeTitle" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label small fw-bold">Category</label>
-                                                <select class="form-select form-select-sm" id="noticeCategory">
-                                                    <option value="General">General Notice</option>
-                                                    <option value="NIT">Tender / NIT</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label class="form-label small fw-bold">Date</label>
-                                                <input type="text" class="form-control form-control-sm" id="noticeDate" placeholder="DD/MM/YYYY" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label small fw-bold">Document Link / URL</label>
-                                                <input type="text" class="form-control form-control-sm" id="noticeLink" placeholder="https://...">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label small fw-bold">Description</label>
-                                                <textarea class="form-control form-control-sm" id="noticeDesc" rows="2"></textarea>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-sm btn-notice-orange px-4">Save Notice to Firebase</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <hr class="my-4">
-                                    <h6 class="fw-bold text-dark mb-3">Existing Notices in Firebase</h6>
-                                    <div class="table-responsive">
-                                        <table class="table table-sm table-bordered align-middle">
-                                            <thead class="table-light">
-                                                <tr><th>Title</th><th>Category</th><th>Date</th><th>Action</th></tr>
-                                            </thead>
-                                            <tbody id="adminNoticeTableBody">
-                                                <!-- Dynamic rows -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <!-- Scheme Tab -->
-                                <div class="tab-pane fade" id="adminSchemeTab">
-                                    <h6 class="fw-bold text-dark mb-3">Add Welfare Scheme</h6>
-                                    <form id="schemeForm" onsubmit="handleAddScheme(event)">
-                                        <div class="row g-3">
-                                            <div class="col-md-4">
-                                                <label class="form-label small fw-bold">Scheme Name</label>
-                                                <input type="text" class="form-control form-control-sm" id="schemeName" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label small fw-bold">Portal / Link URL</label>
-                                                <input type="text" class="form-control form-control-sm" id="schemeUrl" required>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label small fw-bold">Icon Class (FontAwesome)</label>
-                                                <input type="text" class="form-control form-control-sm" id="schemeIcon" value="fa-hands-holding-child">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label small fw-bold">Description</label>
-                                                <textarea class="form-control form-control-sm" id="schemeDesc" rows="2" required></textarea>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-sm btn-notice-orange px-4">Save Scheme to Firebase</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <hr class="my-4">
-                                    <h6 class="fw-bold text-dark mb-3">Existing Schemes</h6>
-                                    <div id="adminSchemeList"></div>
-                                </div>
-
-                                <!-- Official Tab -->
-                                <div class="tab-pane fade" id="adminOfficialTab">
-                                    <h6 class="fw-bold text-dark mb-3">Add Block Official / Directory Entry</h6>
-                                    <form id="officialForm" onsubmit="handleAddOfficial(event)">
-                                        <div class="row g-3">
-                                            <div class="col-md-3">
-                                                <label class="form-label small fw-bold">Full Name</label>
-                                                <input type="text" class="form-control form-control-sm" id="offName" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label small fw-bold">Designation</label>
-                                                <input type="text" class="form-control form-control-sm" id="offDesig" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label small fw-bold">Contact Number</label>
-                                                <input type="text" class="form-control form-control-sm" id="offPhone" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="form-label small fw-bold">Email</label>
-                                                <input type="email" class="form-control form-control-sm" id="offEmail" required>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <button type="submit" class="btn btn-sm btn-notice-orange px-4">Save Official to Firebase</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <hr class="my-4">
-                                    <h6 class="fw-bold text-dark mb-3">Existing Officials Directory</h6>
-                                    <div id="adminOfficialList"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                renderAdminTables();
-            } else if (tabName === 'schemes' || tabName === 'bdoDirectory' || tabName === 'blockOfficials' || tabName === 'blockProfile' || tabName === 'locationMap' || tabName === 'gpList' || tabName === 'departments' || tabName === 'tenders' || tabName === 'notices' || tabName === 'pension' || tabName === 'gallery' || tabName === 'about') {
-                renderStaticPageView(tabName);
-            }
-        };
-
-        // Admin Action Handlers
-        window.handleAddNotice = async function(e) {
-            e.preventDefault();
-            if (!auth.currentUser) return showAlert('Error', 'Not authenticated with Firebase.');
-            
-            const title = document.getElementById('noticeTitle').value;
-            const category = document.getElementById('noticeCategory').value;
-            const date = document.getElementById('noticeDate').value;
-            const link = document.getElementById('noticeLink').value;
-            const description = document.getElementById('noticeDesc').value;
-
-            try {
-                const noticesCol = collection(db, 'artifacts', appId, 'public', 'data', 'notices');
-                await addDoc(noticesCol, { title, category, date, link, description, createdAt: new Date().toISOString() });
-                showAlert('Success', 'Notice successfully saved to Firebase cloud!');
-                document.getElementById('noticeForm').reset();
-                renderAdminTables();
-            } catch (err) {
-                console.error(err);
-                showAlert('Error', 'Failed to save notice to Firebase.');
-            }
-        };
-
-        window.deleteNotice = async function(id) {
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'notices', id));
-                showAlert('Success', 'Notice deleted successfully from Firebase.');
-            } catch (err) {
-                console.error(err);
-                showAlert('Error', 'Failed to delete notice.');
-            }
-        };
-
-        window.handleAddScheme = async function(e) {
-            e.preventDefault();
-            if (!auth.currentUser) return showAlert('Error', 'Not authenticated.');
-            const name = document.getElementById('schemeName').value;
-            const url = document.getElementById('schemeUrl').value;
-            const icon = document.getElementById('schemeIcon').value;
-            const description = document.getElementById('schemeDesc').value;
-
-            try {
-                const schemesCol = collection(db, 'artifacts', appId, 'public', 'data', 'schemes');
-                await addDoc(schemesCol, { name, url, icon, description, createdAt: new Date().toISOString() });
-                showAlert('Success', 'Scheme successfully saved to Firebase!');
-                document.getElementById('schemeForm').reset();
-                renderAdminTables();
-            } catch (err) {
-                console.error(err);
-                showAlert('Error', 'Failed to save scheme.');
-            }
-        };
-
-        window.deleteScheme = async function(id) {
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'schemes', id));
-                showAlert('Success', 'Scheme deleted.');
-            } catch (err) {
-                console.error(err);
-                showAlert('Error', 'Failed to delete scheme.');
-            }
-        };
-
-        window.handleAddOfficial = async function(e) {
-            e.preventDefault();
-            if (!auth.currentUser) return showAlert('Error', 'Not authenticated.');
-            const name = document.getElementById('offName').value;
-            const designation = document.getElementById('offDesig').value;
-            const phone = document.getElementById('offPhone').value;
-            const email = document.getElementById('offEmail').value;
-
-            try {
-                const officialsCol = collection(db, 'artifacts', appId, 'public', 'data', 'officials');
-                await addDoc(officialsCol, { name, designation, phone, email, createdAt: new Date().toISOString() });
-                showAlert('Success', 'Official successfully added to directory in Firebase!');
-                document.getElementById('officialForm').reset();
-                renderAdminTables();
-            } catch (err) {
-                console.error(err);
-                showAlert('Error', 'Failed to save official.');
-            }
-        };
-
-        window.deleteOfficial = async function(id) {
-            try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'officials', id));
-                showAlert('Success', 'Official removed.');
-            } catch (err) {
-                console.error(err);
-                showAlert('Error', 'Failed to delete official.');
-            }
-        };
-
-        function renderAdminTables() {
-            // Render Notices Table
-            const noticeBody = document.getElementById('adminNoticeTableBody');
-            if (noticeBody) {
-                if (globalNotices.length === 0) {
-                    noticeBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted small">No notices in Firebase.</td></tr>`;
-                } else {
-                    let html = '';
-                    globalNotices.forEach(n => {
-                        html += `
-                            <tr>
-                                <td>${n.title}</td>
-                                <td><span class="badge bg-warning text-dark">${n.category}</span></td>
-                                <td>${n.date || ''}</td>
-                                <td><button class="btn btn-sm btn-danger py-0 px-2" onclick="deleteNotice('${n.id}')"><i class="fa fa-trash"></i></button></td>
-                            </tr>
-                        `;
-                    });
-                    noticeBody.innerHTML = html;
-                }
-            }
-
-            // Render Schemes Table
-            const schemeDiv = document.getElementById('adminSchemeList');
-            if (schemeDiv) {
-                if (globalSchemes.length === 0) {
-                    schemeDiv.innerHTML = `<p class="text-muted small">No schemes saved in Firebase.</p>`;
-                } else {
-                    let html = '<ul class="list-group">';
-                    globalSchemes.forEach(s => {
-                        html += `<li class="list-group-item d-flex justify-content-between align-items-center small"><div><strong>${s.name}</strong> - ${s.description}</div> <button class="btn btn-sm btn-danger py-0 px-2" onclick="deleteScheme('${s.id}')"><i class="fa fa-trash"></i></button></li>`;
-                    });
-                    html += '</ul>';
-                    schemeDiv.innerHTML = html;
-                }
-            }
-
-            // Render Officials Table
-            const offDiv = document.getElementById('adminOfficialList');
-            if (offDiv) {
-                if (globalOfficials.length === 0) {
-                    offDiv.innerHTML = `<p class="text-muted small">No officials saved in Firebase.</p>`;
-                } else {
-                    let html = '<ul class="list-group">';
-                    globalOfficials.forEach(o => {
-                        html += `<li class="list-group-item d-flex justify-content-between align-items-center small"><div><strong>${o.name}</strong> (${o.designation}) - Ph: ${o.phone}</div> <button class="btn btn-sm btn-danger py-0 px-2" onclick="deleteOfficial('${o.id}')"><i class="fa fa-trash"></i></button></li>`;
-                    });
-                    html += '</ul>';
-                    offDiv.innerHTML = html;
-                }
-            }
-        }
-
-        // Render Static / Directory Pages
-        function renderStaticPageView(tabName) {
-            const container = document.getElementById('view-container');
-            if (tabName === 'schemes') {
-                let schemesHtml = '';
-                if (globalSchemes.length === 0) {
-                    schemesHtml = `
-                        <div class="col-md-4">
-                            <div class="card service-card h-100 shadow-sm p-3 text-center">
-                                <div class="card-body">
-                                    <div class="service-icon mb-3"><i class="fa fa-hands-holding-child"></i></div>
-                                    <h5 class="fw-bold text-dark">Jan Kalyan Shivir</h5>
-                                    <p class="small text-muted">Find camp locations, schedules, and application status tracking.</p>
-                                    <a href="https://jks.wb.gov.in" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">View Schedule</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card service-card h-100 shadow-sm p-3 text-center">
-                                <div class="card-body">
-                                    <div class="service-icon mb-3"><i class="fa fa-notes-medical"></i></div>
-                                    <h5 class="fw-bold text-dark">Ayushman Bharat</h5>
-                                    <p class="small text-muted">Check family enrollment status and digital health card generation.</p>
-                                    <a href="https://beneficiary.nha.gov.in/" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">Check Status</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card service-card h-100 shadow-sm p-3 text-center">
-                                <div class="card-body">
-                                    <div class="service-icon mb-3"><i class="fa fa-house-chimney-user"></i></div>
-                                    <h5 class="fw-bold text-dark">Awas Yojana</h5>
-                                    <p class="small text-muted">Verify beneficiary lists and housing installment updates.</p>
-                                    <a href="https://awaassoft.pmayg.dord.gov.in" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">Beneficiary Details</a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    globalSchemes.forEach(s => {
-                        schemesHtml += `
-                            <div class="col-md-4 mb-3">
-                                <div class="card service-card h-100 shadow-sm p-3 text-center">
-                                    <div class="card-body">
-                                        <div class="service-icon mb-3"><i class="fa ${s.icon || 'fa-hand-holding-hand'}"></i></div>
-                                        <h5 class="fw-bold text-dark">${s.name}</h5>
-                                        <p class="small text-muted">${s.description}</p>
-                                        <a href="${s.url}" target="_blank" class="btn btn-sm text-white stretched-link rounded-pill px-3" style="background-color: var(--wb-header-dark);">Access Portal</a>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
-                container.innerHTML = `
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom"><i class="fa fa-hand-holding-hand me-2"></i> Government Welfare Schemes & Portals</div>
-                        <div class="card-body">
-                            <div class="row g-3">${schemesHtml}</div>
-                        </div>
-                    </div>
-                `;
-            } else if (tabName === 'bdoDirectory' || tabName === 'blockOfficials') {
-                let offHtml = '';
-                if (globalOfficials.length === 0) {
-                    offHtml = `
-                        <tr><td>Block Development Officer</td><td>Executive Head</td><td>03512-258221</td><td>bdo.hcp1@gmail.com</td></tr>
-                        <tr><td>Joint BDO</td><td>Administration & Rural Dev</td><td>03512-258222</td><td>jbdo.hcp1@gmail.com</td></tr>
-                    `;
-                } else {
-                    globalOfficials.forEach(o => {
-                        offHtml += `<tr><td>${o.name}</td><td>${o.designation}</td><td>${o.phone}</td><td>${o.email}</td></tr>`;
-                    });
-                }
-                container.innerHTML = `
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom"><i class="fa fa-id-badge me-2"></i> Block Officials Directory (Firebase Sync)</div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped align-middle">
-                                    <thead class="table-dark">
-                                        <tr><th>Name</th><th>Designation</th><th>Contact</th><th>Email</th></tr>
-                                    </thead>
-                                    <tbody>${offHtml}</tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (tabName === 'blockProfile') {
-                container.innerHTML = `
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom"><i class="fa fa-info-circle me-2"></i> Block Profile - Harishchandrapur-I</div>
-                        <div class="card-body">
-                            <p>Harishchandrapur-I is a community development block that administers rural areas in Chanchal subdivision of Malda district in the state of West Bengal, India.</p>
-                            <ul>
-                                <li><strong>Subdivision:</strong> Chanchal</li>
-                                <li><strong>District:</strong> Malda</li>
-                                <li><strong>PIN Code:</strong> 732125</li>
-                                <li><strong>Gram Panchayats:</strong> Harishchandrapur-I, Harishchandrapur-II, Bhingole, Rashidabad, Mahendrapur, Tulshihata, Malhar.</li>
-                            </ul>
-                        </div>
-                    </div>
-                `;
-            } else if (tabName === 'locationMap') {
-                container.innerHTML = `
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom"><i class="fa fa-map-marked-alt me-2"></i> Location & GPS Map</div>
-                        <div class="card-body text-center">
-                            <p class="text-secondary small">Harishchandrapur-I Development Block Office is located centrally in Harishchandrapur, Malda, West Bengal.</p>
-                            <div class="ratio ratio-16x9">
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3618.5!2d87.9!3d25.4!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDI0JzAwLjAiTiA4N8KwNTQnMDAuMCJF!5e0!3m2!1sen!2sin!4v1650000000000!5m2!1sen!2sin" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-header card-header-custom"><i class="fa fa-info-circle me-2"></i> ${tabName.toUpperCase()} Portal</div>
-                        <div class="card-body">
-                            <p class="text-secondary">Information regarding <strong>${tabName}</strong> for Harishchandrapur-I Development Block is currently being updated in Firebase.</p>
-                            <button class="btn btn-sm btn-notice-orange" onclick="switchTab('home')">Return to Home</button>
-                        </div>
-                    </div>
-                `;
-            }
         }
     </script>
 </body>
