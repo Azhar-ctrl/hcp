@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notice & Tender Portal - Harishchandrapur-I Development Block</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font: Inter & Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        themeOrange: '#D35400',
+                        themeOrangeHover: '#B94600',
+                        themeHeader: '#D25400',
+                        themeBg: '#FFFDF9',
+                        themeBorder: '#F3E5D8',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #FFFDF9;
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for preview modals/tables */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d35400;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-gray-800 p-3 sm:p-6 md:p-8">
+
+    <!-- Top Container Wrap -->
+    <div class="max-w-7xl mx-auto w-full">
+
+        <!-- Main Card Wrapper matching reference design -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-8 mb-8">
+            
+            <!-- Header Section with Title -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b-2 border-themeOrange">
+                <div class="flex items-center gap-3">
+                    <!-- Home Button -->
+                    <a href="index.html" title="Go to Home" 
+                       class="inline-flex items-center justify-center p-2.5 text-themeOrange hover:text-white bg-orange-50 hover:bg-themeOrange border border-orange-200 rounded-lg transition-all shadow-2xs active:scale-95 group">
+                        <i class="fa-solid fa-house text-sm sm:text-base transition-transform group-hover:scale-110"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-extrabold text-themeOrange tracking-tight font-heading">
+                            Notice & Tender Portal
+                        </h1>
+                        <p class="text-xs sm:text-sm font-semibold text-gray-500 mt-0.5">
+                            Harishchandrapur-I Development Block, Malda
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Action Buttons (Upload & Logout) -->
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5 w-full sm:w-auto">
+                    <button onclick="openUploadModal('notice')" 
+                            class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-themeOrange hover:bg-themeOrangeHover text-white px-4 py-2.5 rounded-lg font-semibold text-sm transition-all shadow-sm active:scale-95">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                        <span>Upload Notice</span>
+                    </button>
+                    <button onclick="openUploadModal('tender')" 
+                            class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 bg-themeOrange hover:bg-themeOrangeHover text-white px-4 py-2.5 rounded-lg font-semibold text-sm transition-all shadow-sm active:scale-95">
+                        <i class="fa-solid fa-file-circle-plus text-xs"></i>
+                        <span>Upload Tender</span>
+                    </button>
+                    
+                    <!-- Logout Button -->
+                    <button onclick="handleLogout()" title="Logout of Session"
+                            class="inline-flex items-center justify-center gap-2 px-3.5 py-2.5 text-xs font-bold text-red-600 hover:text-white bg-red-50 hover:bg-red-600 border border-red-200 rounded-lg transition-all shadow-2xs active:scale-95 ml-auto sm:ml-0">
+                        <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters & Tab Navigation -->
+            <div class="mt-6 flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4">
+                <!-- Navigation Tabs -->
+                <div class="flex border-b border-gray-200">
+                    <button id="tab-notice" onclick="switchTab('notice')" 
+                            class="py-2.5 px-4 font-bold text-sm border-b-2 border-themeOrange text-themeOrange transition-all focus:outline-none">
+                        Notices (<span id="count-notice">0</span>)
+                    </button>
+                    <button id="tab-tender" onclick="switchTab('tender')" 
+                            class="py-2.5 px-4 font-semibold text-sm border-b-2 border-transparent text-gray-500 hover:text-themeOrange transition-all focus:outline-none">
+                        Tenders (<span id="count-tender">0</span>)
+                    </button>
+                </div>
+
+                <!-- Search & Filter Control -->
+                <div class="flex items-center gap-3">
+                    <div class="relative flex-1 sm:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                        <input type="text" id="searchInput" oninput="renderTable()" 
+                               placeholder="Search memo, title, category..." 
+                               class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-themeOrange transition-colors">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="mt-6 rounded-xl border border-gray-100 overflow-hidden shadow-xs">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse min-w-[850px]">
+                        <thead>
+                            <tr class="bg-themeOrange text-white font-bold text-xs uppercase tracking-wider">
+                                <th class="py-3 px-3 w-12 text-center">Type</th>
+                                <th class="py-3 px-3">Memo / NIT No.</th>
+                                <th class="py-3 px-3 w-1/3">Title & Subject</th>
+                                <th class="py-3 px-3">Publish Date</th>
+                                <th class="py-3 px-3">Closing / Opening Date</th>
+                                <th class="py-3 px-3 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="documentTableBody" class="divide-y divide-gray-100 bg-white text-xs">
+                            <!-- Items inserted dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty State Message -->
+                <div id="emptyState" class="hidden p-8 text-center bg-gray-50/50">
+                    <i class="fa-solid fa-circle-info text-2xl text-themeOrange mb-2"></i>
+                    <p class="text-xs font-semibold text-gray-600">No notices or tenders found matching your criteria.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Upload/Edit Modal -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-200">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-all duration-200 max-h-[90vh] overflow-y-auto" id="uploadModalContainer">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+                <h3 id="modalHeaderTitle" class="text-lg font-bold text-themeOrange font-heading">
+                    Upload New Item
+                </h3>
+                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <form id="itemForm" onsubmit="handleFormSubmit(event)" class="mt-4 space-y-4">
+                <input type="hidden" id="editId" value="">
+                
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Item Category Type</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center justify-center gap-2 p-2.5 border border-gray-200 rounded-lg cursor-pointer font-medium text-xs sm:text-sm hover:bg-gray-50">
+                            <input type="radio" name="itemType" value="notice" id="typeNotice" onchange="toggleTenderFields()" checked class="text-themeOrange focus:ring-themeOrange">
+                            <span>Notice / Circular</span>
+                        </label>
+                        <label class="flex items-center justify-center gap-2 p-2.5 border border-gray-200 rounded-lg cursor-pointer font-medium text-xs sm:text-sm hover:bg-gray-50">
+                            <input type="radio" name="itemType" value="tender" id="typeTender" onchange="toggleTenderFields()" class="text-themeOrange focus:ring-themeOrange">
+                            <span>E-Tender / NIT</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Memo / NIT Number *</label>
+                    <input type="text" id="memoNo" required placeholder="e.g. 102/HCP-I/DEV/2026 or e-NIT-08/2026" 
+                           class="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-themeOrange">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Title & Short Description *</label>
+                    <textarea id="itemTitle" required rows="2" placeholder="Enter brief subject or work details..." 
+                              class="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-themeOrange"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Publish Date *</label>
+                        <input type="date" id="publishDate" required 
+                               class="w-full px-3.5 py-2 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-themeOrange">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Closing Date *</label>
+                        <input type="date" id="closingDate" required 
+                               class="w-full px-3.5 py-2 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-themeOrange">
+                    </div>
+                </div>
+
+                <!-- Fields dynamic to Tenders -->
+                <div id="tenderOnlyFields" class="hidden grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-gray-100">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Estimated Value (₹)</label>
+                        <input type="text" id="amount" placeholder="e.g. 8,45,000" 
+                               class="w-full px-3.5 py-2 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-themeOrange">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Category / Sector</label>
+                        <input type="text" id="category" placeholder="e.g. Civil Works, Electrical" 
+                               class="w-full px-3.5 py-2 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-themeOrange">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Upload Document (PDF) *</label>
+                    <input type="file" id="fileInput" accept=".pdf" 
+                           class="w-full text-xs sm:text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-orange-50 file:text-themeOrange hover:file:bg-orange-100">
+                    
+                    <!-- Attached File Container in Edit Modal -->
+                    <div id="editFilePreview" class="hidden mt-2.5 p-2.5 bg-orange-50/70 border border-orange-200 rounded-lg flex items-center justify-between">
+                        <div class="flex items-center gap-2 overflow-hidden mr-2">
+                            <i class="fa-solid fa-file-pdf text-red-500 text-sm shrink-0"></i>
+                            <span id="editFileName" class="font-medium text-xs text-gray-700 truncate">document.pdf</span>
+                        </div>
+                        <button type="button" id="editDownloadBtn" 
+                                class="shrink-0 inline-flex items-center gap-1.5 text-xs font-bold text-themeOrange bg-white px-2.5 py-1 rounded border border-orange-200 hover:bg-themeOrange hover:text-white transition-all shadow-2xs">
+                            <i class="fa-solid fa-download text-[10px]"></i>
+                            <span>Download</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Actions -->
+                <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 mt-6">
+                    <button type="button" onclick="closeUploadModal()" class="px-5 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" id="saveBtn" class="px-6 py-2 bg-themeOrange hover:bg-themeOrangeHover text-white text-sm font-bold rounded-lg transition-all shadow-sm flex items-center gap-2">
+                        <span id="saveBtnText">Save Item</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Document View Modal -->
+    <div id="viewModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none transition-all duration-200">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl transform scale-95 transition-all duration-200" id="viewModalContainer">
+            <div class="flex justify-between items-start border-b border-gray-100 pb-4">
+                <div>
+                    <span id="viewBadge" class="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-orange-100 text-themeOrange">
+                        Notice
+                    </span>
+                    <h3 id="viewTitle" class="text-lg font-bold text-gray-800 font-heading mt-2">
+                        -
+                    </h3>
+                </div>
+                <button onclick="closeViewModal()" class="text-gray-400 hover:text-gray-600 p-1 rounded-lg">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <div class="mt-4 space-y-3 text-xs sm:text-sm text-gray-600">
+                <div class="grid grid-cols-2 gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                    <div>
+                        <span class="block text-[11px] font-bold text-gray-400 uppercase">Memo / NIT No.</span>
+                        <span id="viewMemo" class="font-semibold text-gray-800"></span>
+                    </div>
+                    <div>
+                        <span class="block text-[11px] font-bold text-gray-400 uppercase">Publish Date</span>
+                        <span id="viewPublish" class="font-semibold text-gray-800"></span>
+                    </div>
+                    <div class="col-span-2">
+                        <span class="block text-[11px] font-bold text-gray-400 uppercase">Closing Date</span>
+                        <span id="viewClosing" class="font-semibold text-gray-800"></span>
+                    </div>
+                    <div id="viewAmountRow" class="col-span-2 hidden pt-2 border-t border-gray-200">
+                        <span class="block text-[11px] font-bold text-gray-400 uppercase">Estimated Amount / Category</span>
+                        <span id="viewAmount" class="font-semibold text-themeOrange"></span>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-orange-50/50 border border-orange-100 rounded-lg flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-file-pdf text-red-500 text-lg"></i>
+                        <span id="viewFileName" class="font-medium text-xs text-gray-700">document.pdf</span>
+                    </div>
+                    <button onclick="alert('Downloading attachment file...')" class="text-xs font-bold text-themeOrange hover:underline">
+                        Download File
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-4 mt-4 border-t border-gray-100">
+                <button onclick="closeViewModal()" class="px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold text-xs rounded-lg transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer matching original reference -->
+    <footer class="mt-8">
+        <div class="bg-themeOrange text-white text-center py-4 px-4 rounded-xl shadow-xs">
+            <p class="font-bold text-xs sm:text-sm">
+                Harishchandrapur-I Development Block | Government of West Bengal
+            </p>
+            <p class="text-[11px] opacity-90 mt-1">
+                © 2026 All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK Imports & Application Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration provided by user
+        const firebaseConfig = {
+            apiKey: "AIzaSyB8AaQk4sJ4WzluvyBceZOCBrZrFCsugU0",
+            authDomain: "harishchandrapur1.firebaseapp.com",
+            databaseURL: "https://harishchandrapur1-default-rtdb.firebaseio.com",
+            projectId: "harishchandrapur1",
+            storageBucket: "harishchandrapur1.firebasestorage.app",
+            messagingSenderId: "590408348445",
+            appId: "1:590408348445:web:ab04cdb1ec40652f4f67f4"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const currentAppId = typeof __app_id !== 'undefined' ? __app_id : 'harishchandrapur1';
+        const itemsCollectionRef = collection(db, 'artifacts', currentAppId, 'public', 'data', 'notices_and_tenders');
+
+        let items = [];
+        let activeTab = 'notice';
+        let useLocalStorageFallback = false;
+
+        // Local Storage Helpers for Permission Fallback
+        const LOCAL_STORAGE_KEY = 'harishchandrapur1_notices_tenders';
+        
+        function getLocalItems() {
+            try {
+                const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+                return stored ? JSON.parse(stored) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveLocalItems(data) {
+            try {
+                // Strip heavy base64 fileData when persisting to localStorage to avoid QuotaExceededError (5MB limit)
+                const lightweightData = data.map(item => {
+                    const { fileData, ...rest } = item;
+                    return rest;
+                });
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(lightweightData));
+            } catch (e) {
+                console.warn("Local storage save skipped or quota reached:", e.message);
+            }
+        }
+
+        // Default initial demo items when fallback is triggered for the first time
+        function getInitialDemoItems() {
+            return [
+                {
+                    id: 'demo-1',
+                    type: 'notice',
+                    memoNo: '102/HCP-I/DEV/2026',
+                    title: 'Public Notice regarding Gram Sabha Annual General Body Meeting',
+                    publishDate: '2026-10-15',
+                    closingDate: '2026-11-05',
+                    fileName: 'Gram_Sabha_Notice_2026.pdf',
+                    createdAt: new Date().toISOString()
+                },
+                {
+                    id: 'demo-2',
+                    type: 'tender',
+                    memoNo: 'e-NIT-08/HCP-I/2026-27',
+                    title: 'Construction of Paver Block Road from Main Chowk to Sub-Centre',
+                    publishDate: '2026-10-20',
+                    closingDate: '2026-11-12',
+                    amount: '₹ 8,45,000',
+                    category: 'Civil Works',
+                    fileName: 'NIT_08_Road_Work.pdf',
+                    createdAt: new Date().toISOString()
+                }
+            ];
+        }
+
+        // Initialize Application & Authenticate
+        window.addEventListener('DOMContentLoaded', async () => {
+            const publishInput = document.getElementById('publishDate');
+            if (publishInput) {
+                publishInput.valueAsDate = new Date();
+            }
+
+            try {
+                await signInAnonymously(auth);
+            } catch (err) {
+                console.warn("Anonymous auth failed, attempting fallback custom token authentication:", err);
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    try {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } catch (customTokenErr) {
+                        console.warn("Custom token sign in failed or mismatched.", customTokenErr);
+                    }
+                }
+            } finally {
+                subscribeToFirestoreData();
+            }
+        });
+
+        // Real-time Firestore Listener with Permission Fallback
+        function subscribeToFirestoreData() {
+            onSnapshot(itemsCollectionRef, (snapshot) => {
+                items = [];
+                snapshot.forEach((docSnap) => {
+                    items.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderTable();
+            }, (error) => {
+                console.warn("Firestore sync warning/permission restriction, switching to persistent local storage mode:", error.message);
+                useLocalStorageFallback = true;
+                
+                let localData = getLocalItems();
+                if (!localData || localData.length === 0) {
+                    localData = getInitialDemoItems();
+                    saveLocalItems(localData);
+                }
+                items = localData;
+                renderTable();
+            });
+        }
+
+        // Attach functions to window scope for HTML inline handlers
+        window.switchTab = function(tab) {
+            activeTab = tab;
+            
+            ['notice', 'tender'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (btn) {
+                    if (t === tab) {
+                        btn.className = "py-2.5 px-4 font-bold text-sm border-b-2 border-themeOrange text-themeOrange transition-all focus:outline-none";
+                    } else {
+                        btn.className = "py-2.5 px-4 font-semibold text-sm border-b-2 border-transparent text-gray-500 hover:text-themeOrange transition-all focus:outline-none";
+                    }
+                }
+            });
+
+            renderTable();
+        };
+
+        window.renderTable = function() {
+            const searchInput = document.getElementById('searchInput');
+            const searchVal = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const tbody = document.getElementById('documentTableBody');
+            const emptyState = document.getElementById('emptyState');
+
+            const noticeCount = document.getElementById('count-notice');
+            const tenderCount = document.getElementById('count-tender');
+            if (noticeCount) noticeCount.innerText = items.filter(i => i.type === 'notice').length;
+            if (tenderCount) tenderCount.innerText = items.filter(i => i.type === 'tender').length;
+
+            let filtered = items.filter(item => {
+                const matchTab = (item.type === activeTab);
+                const matchSearch = (item.memoNo || '').toLowerCase().includes(searchVal) ||
+                                    (item.title || '').toLowerCase().includes(searchVal) ||
+                                    (item.category && item.category.toLowerCase().includes(searchVal));
+                return matchTab && matchSearch;
+            });
+
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                if (emptyState) emptyState.classList.remove('hidden');
+            } else {
+                if (emptyState) emptyState.classList.add('hidden');
+
+                filtered.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-orange-50/40 transition-colors border-b border-gray-100 text-xs";
+
+                    const isNotice = item.type === 'notice';
+                    const badgeClass = isNotice 
+                        ? 'bg-amber-100 text-amber-800 border-amber-200' 
+                        : 'bg-blue-100 text-blue-800 border-blue-200';
+
+                    tr.innerHTML = `
+                        <td class="py-2.5 px-3 text-center">
+                            <span class="inline-block px-1.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wide rounded border ${badgeClass}">
+                                ${isNotice ? 'Notice' : 'Tender'}
+                            </span>
+                        </td>
+                        <td class="py-2.5 px-3 font-semibold text-gray-800 text-xs">
+                            ${escapeHtml(item.memoNo || '')}
+                        </td>
+                        <td class="py-2.5 px-3">
+                            <p class="font-normal text-gray-800 text-xs line-clamp-2">${escapeHtml(item.title || '')}</p>
+                        </td>
+                        <td class="py-2.5 px-3 text-gray-600 font-normal text-xs">
+                            ${formatDate(item.publishDate)}
+                        </td>
+                        <td class="py-2.5 px-3 text-gray-600 font-normal text-xs">
+                            ${formatDate(item.closingDate)}
+                        </td>
+                        <td class="py-2.5 px-3 text-center">
+                            <div class="flex items-center justify-center gap-1">
+                                <button onclick="viewItem('${item.id}')" title="View Document Details" 
+                                        class="p-1 text-gray-500 hover:text-themeOrange hover:bg-orange-50 rounded transition-colors">
+                                    <i class="fa-solid fa-eye text-xs"></i>
+                                </button>
+                                <button onclick="editItem('${item.id}')" title="Edit Item" 
+                                        class="p-1 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                                <button onclick="deleteItem('${item.id}')" title="Delete Item" 
+                                        class="p-1 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+        };
+
+        window.toggleTenderFields = function() {
+            const tenderRadio = document.getElementById('typeTender');
+            const isTender = tenderRadio ? tenderRadio.checked : false;
+            const container = document.getElementById('tenderOnlyFields');
+            if (container) {
+                if (isTender) {
+                    container.classList.remove('hidden');
+                    container.classList.add('grid');
+                } else {
+                    container.classList.add('hidden');
+                    container.classList.remove('grid');
+                }
+            }
+        };
+
+        window.openUploadModal = function(type = 'notice') {
+            const form = document.getElementById('itemForm');
+            if (form) form.reset();
+            
+            document.getElementById('editId').value = '';
+            document.getElementById('modalHeaderTitle').innerText = 'Upload New Item';
+            
+            if (type === 'tender') {
+                document.getElementById('typeTender').checked = true;
+            } else {
+                document.getElementById('typeNotice').checked = true;
+            }
+            toggleTenderFields();
+
+            const publishInput = document.getElementById('publishDate');
+            if (publishInput) publishInput.valueAsDate = new Date();
+
+            const modal = document.getElementById('uploadModal');
+            const container = document.getElementById('uploadModalContainer');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        };
+
+        window.closeUploadModal = function() {
+            const modal = document.getElementById('uploadModal');
+            const container = document.getElementById('uploadModalContainer');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        };
+
+        window.handleFormSubmit = async function(e) {
+            e.preventDefault();
+            const saveBtn = document.getElementById('saveBtn');
+            const saveBtnText = document.getElementById('saveBtnText');
+
+            if (saveBtn && saveBtnText) {
+                saveBtn.disabled = true;
+                saveBtnText.innerText = 'Saving...';
+            }
+
+            const editId = document.getElementById('editId').value;
+            const type = document.getElementById('typeTender').checked ? 'tender' : 'notice';
+            const memoNo = document.getElementById('memoNo').value;
+            const title = document.getElementById('itemTitle').value;
+            const publishDate = document.getElementById('publishDate').value;
+            const closingDate = document.getElementById('closingDate').value;
+            const amount = document.getElementById('amount').value;
+            const category = document.getElementById('category').value;
+            const fileInput = document.getElementById('fileInput');
+
+            let fileName = 'Document_Attachment.pdf';
+            let fileData = null;
+
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                fileName = file.name;
+                fileData = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (event) => resolve(event.target.result);
+                    reader.onerror = () => resolve(null);
+                    reader.readAsDataURL(file);
+                });
+            }
+
+            try {
+                if (useLocalStorageFallback) {
+                    // Local Storage fallback mode
+                    let localItems = getLocalItems();
+                    if (editId) {
+                        localItems = localItems.map(item => {
+                            if (item.id === editId) {
+                                return {
+                                    ...item,
+                                    type,
+                                    memoNo,
+                                    title,
+                                    publishDate,
+                                    closingDate,
+                                    amount: type === 'tender' ? amount : '',
+                                    category: type === 'tender' ? category : '',
+                                    fileName: fileInput.files[0] ? fileName : (item.fileName || 'document.pdf'),
+                                    fileData: fileData || item.fileData || null,
+                                    updatedAt: new Date().toISOString()
+                                };
+                            }
+                            return item;
+                        });
+                    } else {
+                        const newItem = {
+                            id: 'local-' + Date.now(),
+                            type,
+                            memoNo,
+                            title,
+                            publishDate,
+                            closingDate,
+                            fileName,
+                            fileData,
+                            amount: type === 'tender' ? amount : '',
+                            category: type === 'tender' ? category : '',
+                            createdAt: new Date().toISOString()
+                        };
+                        localItems.unshift(newItem);
+                    }
+                    saveLocalItems(localItems);
+                    items = localItems;
+                    renderTable();
+                } else {
+                    // Firestore Mode
+                    if (editId) {
+                        const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'notices_and_tenders', editId);
+                        const existingItem = items.find(i => i.id === editId);
+                        
+                        const updatePayload = {
+                            type,
+                            memoNo,
+                            title,
+                            publishDate,
+                            closingDate,
+                            amount: type === 'tender' ? amount : '',
+                            category: type === 'tender' ? category : '',
+                            fileName: fileInput.files[0] ? fileName : (existingItem ? existingItem.fileName : 'document.pdf'),
+                            updatedAt: new Date().toISOString()
+                        };
+
+                        if (fileData) updatePayload.fileData = fileData;
+
+                        await updateDoc(docRef, updatePayload);
+                    } else {
+                        const newPayload = {
+                            type,
+                            memoNo,
+                            title,
+                            publishDate,
+                            closingDate,
+                            fileName,
+                            amount: type === 'tender' ? amount : '',
+                            category: type === 'tender' ? category : '',
+                            createdAt: new Date().toISOString()
+                        };
+
+                        if (fileData) newPayload.fileData = fileData;
+
+                        await addDoc(itemsCollectionRef, newPayload);
+                    }
+                }
+            } catch (err) {
+                console.warn("Firestore write restricted, falling back to local storage:", err);
+                // Fallback on write exception
+                useLocalStorageFallback = true;
+                let localItems = getLocalItems();
+                const newItem = {
+                    id: 'local-' + Date.now(),
+                    type, memoNo, title, publishDate, closingDate, fileName, fileData,
+                    amount: type === 'tender' ? amount : '',
+                    category: type === 'tender' ? category : '',
+                    createdAt: new Date().toISOString()
+                };
+                localItems.unshift(newItem);
+                saveLocalItems(localItems);
+                items = localItems;
+                renderTable();
+            } finally {
+                if (saveBtn && saveBtnText) {
+                    saveBtn.disabled = false;
+                    saveBtnText.innerText = 'Save Item';
+                }
+                closeUploadModal();
+            }
+        };
+
+        window.editItem = function(id) {
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('editId').value = item.id;
+            document.getElementById('modalHeaderTitle').innerText = 'Edit Uploaded Item';
+            
+            if (item.type === 'tender') {
+                document.getElementById('typeTender').checked = true;
+            } else {
+                document.getElementById('typeNotice').checked = true;
+            }
+            toggleTenderFields();
+
+            document.getElementById('memoNo').value = item.memoNo || '';
+            document.getElementById('itemTitle').value = item.title || '';
+            document.getElementById('publishDate').value = item.publishDate || '';
+            document.getElementById('closingDate').value = item.closingDate || '';
+            document.getElementById('amount').value = item.amount || '';
+            document.getElementById('category').value = item.category || '';
+
+            // Handle file preview and download in Edit modal
+            const filePreview = document.getElementById('editFilePreview');
+            const fileNameSpan = document.getElementById('editFileName');
+            const downloadBtn = document.getElementById('editDownloadBtn');
+
+            if (filePreview && fileNameSpan && downloadBtn) {
+                filePreview.classList.remove('hidden');
+                fileNameSpan.innerText = item.fileName || 'document.pdf';
+
+                downloadBtn.onclick = (e) => {
+                    e.preventDefault();
+                    if (item.fileData) {
+                        const a = document.createElement('a');
+                        a.href = item.fileData;
+                        a.download = item.fileName || 'document.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    } else {
+                        const blob = new Blob([`Document Content for Memo: ${item.memoNo}\nTitle: ${item.title}`], { type: 'application/pdf' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = item.fileName || 'document.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }
+                };
+            }
+
+            const modal = document.getElementById('uploadModal');
+            const container = document.getElementById('uploadModalContainer');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        };
+
+        window.deleteItem = async function(id) {
+            try {
+                if (useLocalStorageFallback) {
+                    let localItems = getLocalItems();
+                    localItems = localItems.filter(i => i.id !== id);
+                    saveLocalItems(localItems);
+                    items = localItems;
+                    renderTable();
+                } else {
+                    const docRef = doc(db, 'artifacts', currentAppId, 'public', 'data', 'notices_and_tenders', id);
+                    await deleteDoc(docRef);
+                }
+            } catch (err) {
+                console.warn("Firestore delete restricted, falling back to local storage:", err);
+                useLocalStorageFallback = true;
+                let localItems = getLocalItems().filter(i => i.id !== id);
+                saveLocalItems(localItems);
+                items = localItems;
+                renderTable();
+            }
+        };
+
+        window.viewItem = function(id) {
+            const item = items.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('viewBadge').innerText = (item.type || '').toUpperCase();
+            document.getElementById('viewTitle').innerText = item.title || '';
+            document.getElementById('viewMemo').innerText = item.memoNo || '';
+            document.getElementById('viewPublish').innerText = formatDate(item.publishDate);
+            document.getElementById('viewClosing').innerText = formatDate(item.closingDate);
+            document.getElementById('viewFileName').innerText = item.fileName || 'document.pdf';
+
+            const amountRow = document.getElementById('viewAmountRow');
+            if (item.type === 'tender' && (item.amount || item.category)) {
+                amountRow.classList.remove('hidden');
+                let details = [];
+                if (item.amount) details.push(item.amount);
+                if (item.category) details.push(`(${item.category})`);
+                document.getElementById('viewAmount').innerText = details.join(' ');
+            } else {
+                amountRow.classList.add('hidden');
+            }
+
+            const downloadBtn = document.getElementById('downloadFileBtn');
+            if (downloadBtn) {
+                downloadBtn.onclick = () => {
+                    if (item.fileData) {
+                        const a = document.createElement('a');
+                        a.href = item.fileData;
+                        a.download = item.fileName || 'document.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    } else {
+                        // Create a mock PDF Blob if fileData is absent
+                        const blob = new Blob([`Document Content for Memo: ${item.memoNo}\nTitle: ${item.title}`], { type: 'application/pdf' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = item.fileName || 'document.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    }
+                };
+            }
+
+            const modal = document.getElementById('viewModal');
+            const container = document.getElementById('viewModalContainer');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        };
+
+        window.closeViewModal = function() {
+            const modal = document.getElementById('viewModal');
+            const container = document.getElementById('viewModalContainer');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        };
+
+        window.handleLogout = function() {
+            window.location.reload();
+        };
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            return dateStr;
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>
